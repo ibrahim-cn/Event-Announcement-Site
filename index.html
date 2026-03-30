@@ -1,0 +1,59 @@
+<!--
+This page represents the homepage of the sports event announcement platform.
+Users can browse events, search, and filter them.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Event Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation bar: users can move between pages -->
+  <header>
+    <nav class="navbar">
+      <h1 class="logo">SportEvents</h1>
+
+      <!-- Menu links -->
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="create-event.html">Create Event</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero section: introduction of the page -->
+    <section class="hero">
+      <h2>Discover Sports Events</h2>
+      <p>Browse and find events that match your interests.</p>
+    </section>
+
+    <!-- Search and filter section -->
+    <section class="filters">
+      <input type="text" id="searchInput" placeholder="Search events...">
+
+      <select id="categoryFilter">
+        <option value="sports">Sports</option>
+      </select>
+    </section>
+
+    <!-- Event list section -->
+    <section class="event-list">
+      <div class="event-card" data-category="sports">
+        <h3>Football Tournament</h3>
+        <p>Date: 20 April 2026</p>
+        <p>Location: Izmir</p>
+        <a href="event-detail.html">View Details</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
