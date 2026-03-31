@@ -1,6 +1,7 @@
 <!--
-This page represents the homepage of the sports event announcement platform.
-Users can browse events, search, and filter them.
+This page is the homepage of the sports event platform.
+Users can search and view all created sports events.
+Only the event owner can see the cancel button for their own events.
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,8 @@ Users can browse events, search, and filter them.
         <li><a href="create-event.html">Create Event</a></li>
         <li><a href="login.html">Login</a></li>
         <li><a href="register.html">Register</a></li>
-      </ul>
+        <li><a href="#" id="logoutLink">Logout</a></li>
+        </ul>
     </nav>
   </header>
 
@@ -44,16 +46,11 @@ Users can browse events, search, and filter them.
     </section>
 
     <!-- Event list section -->
-    <section class="event-list">
-      <div class="event-card" data-category="sports">
-        <h3>Football Tournament</h3>
-        <p>Date: 20 April 2026</p>
-        <p>Location: Izmir</p>
-        <a href="event-detail.html">View Details</a>
-      </div>
+    <section class="event-list" id="eventList">
     </section>
   </main>
 
   <script src="script.js"></script>
+  <script src="logout.js"></script>
 </body>
 </html>
