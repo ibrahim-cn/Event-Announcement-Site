@@ -1,4 +1,4 @@
-# Event-Announcement-Site
+# Event-Advertisement-Site
 ## TEAM MEMBERS
 Sude Nur Yıldırım, 220513359
 Hatice Çakı, 220513379
