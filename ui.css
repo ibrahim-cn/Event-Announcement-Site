@@ -1,0 +1,24 @@
+/* Input focus */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border: 1px solid #3498db;
+    box-shadow: 0 0 5px rgba(52,152,219,0.4);
+}
+
+/* Button hover */
+button {
+    transition: all 0.2s ease;
+}
+
+    button:hover {
+        transform: translateY(-2px);
+    }
+
+/* Card hover */
+.event-card {
+    transition: 0.2s;
+}
+
+    .event-card:hover {
+        transform: translateY(-5px);
+    }
