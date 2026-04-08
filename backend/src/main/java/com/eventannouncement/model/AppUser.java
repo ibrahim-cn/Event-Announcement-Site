@@ -1,6 +1,7 @@
 package com.eventannouncement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class AppUser extends BaseEntity {
 
     private String email = "";
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password = "";
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)

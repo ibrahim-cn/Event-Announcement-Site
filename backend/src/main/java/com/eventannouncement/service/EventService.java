@@ -1,6 +1,7 @@
 package com.eventannouncement.service;
 
 import com.eventannouncement.model.Event;
+import com.eventannouncement.repository.EventRegistrationRepository;
 import com.eventannouncement.repository.EventRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final EventRegistrationRepository eventRegistrationRepository;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, EventRegistrationRepository eventRegistrationRepository) {
         this.eventRepository = eventRepository;
+        this.eventRegistrationRepository = eventRegistrationRepository;
     }
 
     public List<Event> getList() {
@@ -34,6 +37,10 @@ public class EventService {
     }
 
     public void delete(Event event) {
+        if (event == null || event.getId() == null) {
+            return;
+        }
+        eventRegistrationRepository.deleteByEventId(event.getId());
         eventRepository.delete(event);
     }
 }

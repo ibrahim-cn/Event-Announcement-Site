@@ -49,3 +49,8 @@ bin/
 
 # Local configuration file (properties, etc)
 application-local.properties
+
+# H2 database files (local per developer)
+/data/
+*.mv.db
+*.trace.db

@@ -9,6 +9,7 @@ if (logoutLink) {
     e.preventDefault();
 
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("accessToken");
 
     alert("You have logged out.");
 

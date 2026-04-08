@@ -1,5 +1,6 @@
 package com.eventannouncement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class Event extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "events"})
+    @JsonIgnore
     private Category category;
 
     // --- AppUser Relationship (ManyToOne) ---
@@ -35,6 +37,7 @@ public class Event extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_user_id", insertable = false, updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "events", "password"})
+    @JsonIgnore
     private AppUser appUser;
 
     // --- Getters & Setters ---
