@@ -113,13 +113,11 @@ o	Validation: Ensures that both the event and the user exist and are active befo
 •	**Lifecycle Management (EventService):**
 o	Cascade Cleanup: When an event is deleted, the service ensures all related registrations are purged first to maintain referential integrity.
 # C. API Design & Functional Exposure
-The Controller layer exposes the internal logic through a RESTful API, organized by resource responsibility.
 •	EventsController: Provides endpoints for creating, listing, and deleting events, specifically filtering actions based on the organizer's identity.
 •	AppUsersController: Manages the CRUD lifecycle of users, ensuring that user data can be updated or retrieved securely.
 •	AuthController: Handles the entry points for the application, specifically login and register scenarios.
 •	CategoriesController: Exposes the taxonomy of the system, allowing for the management of event categories.
 # D. Automated Developer Tooling (SQL Export Logic)
-A unique logical feature of this architecture is the State Persistence Mechanism found in DataSqlExportService.
 •	Real-time Monitoring: Through the use of Hibernate event listeners (*DataSqlExportIntegrator*), the system tracks every logical change (*Insert/Update/Delete*).
 •	Auto-Synchronization: Upon a successful transaction commit, the service automatically exports the current database state into a physical data.sql file. This ensures that the logical state of the development environment is always preserved and shareable via version control.
 
@@ -133,7 +131,6 @@ The system operates as a stateless web application where each HTTP request is ha
 •	Authentication Process: The *JwtAuthenticationFilter* intercepts requests to extract the "Bearer" token. It uses the *JwtService* to validate the token and extract the user's email. If valid, an Authentication object is injected into the SecurityContextHolder, allowing subsequent layers to identify the user.
 •	Authorization: The *SecurityConfig* defines rules (e.g., *.authenticated()*) that processes must satisfy before reaching the Controller layer.
 # B. Transaction and State Synchronization
-One of the most critical processes in this system is the automated state persistence mechanism that keeps the *data.sql* file in sync with the H2 database.
 •	Hibernate Event Interception: When a user performs an action that modifies data (*INSERT, UPDATE, DELETE*), Hibernate's *DataSqlExportEventListener* captures the event.
 •	Post-Commit Synchronization: To ensure data integrity, the system does not export the file during an active transaction. Instead, the *DataSqlExportService* uses *TransactionSynchronizationManager* to schedule the export process only after a successful database commit (*afterCommit*).
 •	Atomic Export: The doExportNow method is wrapped in a synchronized(*exportLock*) block to prevent race conditions where multiple threads might attempt to write to the *data.sql file* at the same time.
@@ -166,7 +163,6 @@ The interactions between processes can be summarized in two main flows:
 
 ### 7. ARCHITECTURAL DOCUMENTATION: DEVELOPMENT VIEW
 # A. Module Decomposition & Layering Strategy
-The project is built using a Strict Layered Architecture to ensure a separation of concerns. This allows developers to modify business logic without impacting the database schema or the API endpoints.
 •	Presentation Layer (*com.eventannouncement.controller*): Manages RESTful API endpoints. Controllers like *EventsController* and *AuthControlle*r handle HTTP request mapping and JSON serialization.
 •	Business Logic Layer (*com.eventannouncement.service*): Encapsulates the core intelligence of the application. Services such as *EventService* and *EventRegistrationService* perform validation and coordinate data flow between layers.
 •	Data Access Layer (*com.eventannouncement.repository*): Utilizes Spring Data JPA to abstract database operations. Interfaces like *AppUserRepository* and *EventRepository* provide standard CRUD and custom query capabilities.
@@ -178,11 +174,9 @@ The system is developed using Java 21 and Spring Boot 3.4.4, managed primarily t
 •	JSON Web Tokens (JWT): Implements io.jsonwebtoken (JJWT) for secure, stateless authentication.
 •	Database: Employs an H2 In-Memory Database to facilitate rapid development and testing without requiring external database installation.
 # C. Specialized Developer Tooling
-A distinctive feature of this project's development environment is the automated data synchronization mechanism.
 •	*DataSqlExportService*: This internal utility monitors the database state. Whenever an *INSERT, UPDATE, or DELETE* occurs, it triggers a refresh of the *src/main/resources/data.sql* file.
 •	Hibernate Integration: The development environment is configured via *DataSqlExportHibernateConfig* to inject custom Integrators and *EventListeners* into the Hibernate lifecycle. This ensures that the logical data state is always physically backed up for team collaboration.
 # D. Source Code Organization
-The code is organized to follow industry-standard conventions, making it easily navigable for new developers:
 
 | Package | Responsibility |
 | :--- | :--- |
@@ -199,7 +193,6 @@ The code is organized to follow industry-standard conventions, making it easily 
 
 ### 8. PHYSICAL VIEW: DEPLOYMENT & INFRASTRUCTURE
 # A. Runtime Environment & Processing
-The application is designed to be a lightweight, self-contained executable that minimizes external dependencies.
 **•	Execution Unit:** The system is packaged as a single Executable JAR file, which includes all necessary libraries and an embedded web server.
 **•	Java Runtime:** Requires Java Runtime Environment (JRE) 21 as the host environment.
 **•	Web Server:** Uses an Embedded Tomcat 10 server, physically bound to Port 8081 (as configured in server.port=8081).
@@ -218,7 +211,6 @@ o	Physical Location: Data is saved to the host machine's disk at ./data/eventdb.
 o	Automated Export: Every data modification triggers a physical write to src/main/resources/data.sql.
 o	Utility: This file acts as a version-controlled physical backup that allows developers to synchronize database states across different physical machines using Git.
 # D. Security Configuration
-The physical security of the system's communication is managed through JWT (JSON Web Tokens).
 **•	Token Storage:** Tokens are physically stored on the client side (e.g., *LocalStorage*).
 **•	Server-Side Validation:** The server uses a physical secret key *(app.jwt.secret*) and a 24-hour expiration setting (86400000 ms) to validate incoming tokens at the network boundary.
 
@@ -234,7 +226,6 @@ This diagram identifies the primary actors and their interactions with the syste
 
 
 # B. Integrated Execution Scenario: "Creating a Verified Event"
-This scenario demonstrates the synergy between the different architectural views during a standard workflow.
 1.	Authentication (Process View): A user sends a LoginRequest to the AuthController. The AuthService validates the credentials and the JwtService issues a token.
 2.	Request Authorization (Development & Process View): The user attempts to create an event. The JwtAuthenticationFilter extracts the email from the token, and the SecurityConfig confirms the user is authenticated.
 3.	Domain Logic (Logical View): The EventsController receives the Event object. It retrieves the current user's ID from the AppUserRepository and assigns it as the event's appUserId (the organizer).
