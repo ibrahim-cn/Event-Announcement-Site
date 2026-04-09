@@ -52,10 +52,9 @@ The **Event Announcement System** is a comprehensive full-stack solution designe
 ### 2. REFERENCES
 ### 3. SOFTWARE ARCHITECTURE
 
-The system follows a **Layered Architecture Style** combined with a **Client-Server** model, ensuring a clear separation of concerns and high maintainability. This architecture is articulated through the following views:
+The system follows a **Layered Architecture Style** combined with a **Client-Server** model, ensuring a clear separation of concerns and high maintainability. 
 
  **A. Logical View (Layered Architecture Style)**
-The system is organized into distinct horizontal layers, each with specific responsibilities:
 * **Presentation Layer**: The user interface is built with modular HTML, CSS, and vanilla JavaScript, handling user interactions and RESTful API communication.
 * **Controller Layer**: Classes like `EventsController` and `AuthController` act as entry points, managing HTTP requests and routing them to appropriate services.
 * **Service Layer**: This "brain" of the application, including components like `EventRegistrationService`, enforces business rules, such as preventing event organizers from registering for their own events.
@@ -70,7 +69,7 @@ The system is organized into distinct horizontal layers, each with specific resp
 * **Structural Consistency**: All domain entities (User, Event, Category) inherit from a common `BaseEntity`, ensuring uniform auditing of IDs and creation dates.
 
 **D. Physical View (Embedded Deployment Style)**
-* **Application Server**: The system runs on the provided server
+* **Application Server**: The system runs on the provided server.
 * **Storage Infrastructure**: Data is persisted in a file-based **H2 Database** located on the local disk at `./data/eventdb`.
 
  **E. Scenarios**
@@ -98,7 +97,7 @@ The system is organized into distinct horizontal layers, each with specific resp
 The core of the system is built on a robust entity-relationship model that manages the lifecycle of events and user interactions.
 •	**Foundation (BaseEntity):** All domain objects inherit from this abstract superclass. It ensures that every record in the system possesses a unique identity (ID), a record of creation (createdDate), and an operational status flag.
 • **User Management (AppUser):** Represents the primary actor. It manages personal credentials and acts as the "Organizer" for events through a One-to-Many relationship.
-•	**Event Categorization (Category):** Provides a logical grouping for events (e.g., Seminar,football Match, Workshop), allowing for structured data retrieval and better user experience.
+•	**Event Categorization (Category):** Provides a logical grouping for events (e.g., Seminar, Football Match, Workshop), allowing for structured data retrieval and better user experience.
 •	**Event Core (Event):** The central entity holding metadata such as title, description, location, and timing. It maintains Many-to-One relationships with both Category and AppUser.
 •	**Participation Logic (EventRegistration):** A junction entity used to bridge users and events. It enforces a Unique Constraint to ensure a user cannot register for the same event more than once.
 # B. Service Layer & Business Intelligence
@@ -132,13 +131,11 @@ The system operates as a stateless web application where each HTTP request is ha
 # B. Transaction and State Synchronization
 •	Hibernate Event Interception: When a user performs an action that modifies data (*INSERT, UPDATE, DELETE*), Hibernate's *DataSqlExportEventListener* captures the event.
 •	Post-Commit Synchronization: To ensure data integrity, the system does not export the file during an active transaction. Instead, the *DataSqlExportService* uses *TransactionSynchronizationManager* to schedule the export process only after a successful database commit (*afterCommit*).
-•	Atomic Export: The doExportNow method is wrapped in a synchronized(*exportLock*) block to prevent race conditions where multiple threads might attempt to write to the *data.sql file* at the same time.
 
 <img width="605" height="318" alt="image" src="https://github.com/user-attachments/assets/d086778e-9486-4fe4-bd99-9bea99c76cc8" />
 
  
 # C. Concurrency and Resource Management
-The system is designed to handle multiple concurrent users while maintaining strict logical boundaries.
 •**Statelessness:** By utilizing SessionCreationPolicy.STATELESS, the system avoids server-side session overhead, allowing each process to be fully contained within the request thread.
 •	**Thread Safety:**
 o	Services: All services are managed as singleton beans by Spring, requiring thread-safe implementation.
@@ -174,7 +171,7 @@ The system is developed using Java 21 and Spring Boot 3.4.4, managed primarily t
 •	Database: Employs an H2 In-Memory Database to facilitate rapid development and testing without requiring external database installation.
 # C. Specialized Developer Tooling
 •	*DataSqlExportService*: This internal utility monitors the database state. Whenever an *INSERT, UPDATE, or DELETE* occurs, it triggers a refresh of the *src/main/resources/data.sql* file.
-•	Hibernate Integration: The development environment is configured via *DataSqlExportHibernateConfig* to inject custom Integrators and *EventListeners* into the Hibernate lifecycle. This ensures that the logical data state is always physically backed up for team collaboration.
+
 # D. Source Code Organization
 
 | Package | Responsibility |
@@ -238,5 +235,20 @@ This diagram identifies the primary actors and their interactions with the syste
 
  <img width="219" height="935" alt="image" src="https://github.com/user-attachments/assets/90a94666-48ae-4521-82fb-5f6f562447f9" />
 
+### 10. SIZE AND PERFORMANCE
 
+| Category | Feature | Analysis & Metrics |
+| :--- | :--- | :--- |
+| **System Size** | **Data Footprint** | Persistence is managed via a file-based H2 database (`./data/eventdb`). The initial footprint is minimal (< 5MB), scaling linearly with user-generated events and registrations. |
+| **System Size** | **Resource Efficiency** | Built with vanilla JavaScript and CSS, the frontend avoids heavy frameworks. This results in extremely low bundle sizes, ensuring rapid page loads and high performance. |
+| **Performance** | **Response Latency** | The stateless **JWT-based authentication** architecture eliminates server-side session overhead, targeting an API response time of **< 100ms** for CRUD operations. |
+| **Performance** | **Search Optimization** | The `script.js` implements a client-side "search-as-you-type" filter. By filtering a local array in **O(n)** time, the system provides zero-latency search results. |
+| **Performance** | **I/O Efficiency** | The `DataSqlExportService` runs synchronously after commits to ensure data safety. It is optimized to handle medium-scale snapshots without blocking the main execution thread. |
+| **Performance** | **Search Optimization** | The system employs a "local-data-filtering" strategy where event data is fetched in bulk and filtered in-memory via `script.js`. This eliminates redundant API calls during searching, providing an instantaneous user experience. |
+
+* **Search speed** is guaranteed by the `filterEvents()` function in a `script.js`.
+* **Resource efficiency** is achieved by the choice of **Vanilla JS** and a file-based **H2 database**.
+* **Data safety** is ensured by a custom `DataSqlExportService`.
+
+### 11. QUALITY
 
