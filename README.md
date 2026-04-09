@@ -2,12 +2,12 @@
 
 ## Team members
 
-| Name            | Number    |
-|-----------------|-----------|
-| Sude Nur Yıldırım | 220513359 |
-| Hatice Çakı      | 220513379 |
-| İbrahim Can      | 220513376 |
-| Berivan Alpagu   | 210502083 |
+| Name            | Number    | GitHub Link                          |  
+|-----------------|-----------|--------------------------------------
+| Sude Nur Yıldırım | 220513359 | https://github.com/sudeyldrm54     |
+| Hatice Çakı      | 220513379 |                                     |
+| İbrahim Can      | 220513376 |                                     |
+| Berivan Alpagu   | 210502083 |                                     |
 
 ## Project introduction
 
