@@ -25,4 +25,4 @@ Share event announcements and information in one place.
 
 ## ARCHITECTURE.md Link
 
-[https://github.com/ibrahim-cn/Event-Announcement-Site/blob/4b2471869919fd88d6249e15c6043bec7731b72d/ARCHITECTURE.md](https://github.com/ibrahim-cn/Event-Announcement-Site/blob/a365adf8610d8e0a12d81511fe76e85b0215ddaa/ARCHITECTURE.md) 
+[ARCHITECTURE](https://github.com/ibrahim-cn/Event-Announcement-Site/blob/4b2471869919fd88d6249e15c6043bec7731b72d/ARCHITECTURE.md)
