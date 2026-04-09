@@ -50,6 +50,18 @@
 The **Event Announcement System** is a comprehensive full-stack solution designed to streamline the organization and discovery of diverse community events. Developed with a robust **Java 21** and **Spring Boot 3.4.4** backend, the system implements a sophisticated layered architecture that ensures seamless data flow between RESTful controllers and the **H2 database**. The core functionality revolves around a secure user ecosystem where enthusiasts can register, authenticate and manage their own event listings with complete ownership integrity. A standout feature of the technical scope is the **automated synchronization mechanism**, which triggers a physical `data.sql` update after every database transaction to maintain environment consistency across the development lifecycle. On the frontend, the platform offers a responsive, user-centric interface featuring real-time search filters and dynamic navigation bars that adapt to the user's login state. By enforcing strict business rules—such as preventing organizers from registering for their own events—and providing instant visual feedback through an integrated notification system, the project successfully bridges the gap between complex backend persistence and an intuitive, community-driven user experience.
 
 ### 2. REFERENCES
+| Source Title | Link | 
+| :--- | :--- | 
+| **What is H2 Database? How is it used?** | https://dileksen3417.medium.com/h2-database-nedir-nas%C4%B1l-kullan%C4%B1l%C4%B1r-99f8cf0a4802| 
+| **Creating a REST Service with Java Spring Boot** | https://medium.com/bentego-teknoloji/java-spring-boot-ile-rest-servisi-olu%C5%9Fturmak-f9b737ac982d| 
+| **JavaScript Tutorials and Guides** | https://developer.mozilla.org/en-US/docs/Web/HTML https://developer.mozilla.org/en-US/docs/Web/JavaScript|
+| **CSS: Cascading Style Sheets** | https://developer.mozilla.org/en-US/docs/Web/CSS| 
+| **The 4+1 View Model of Architecture** | https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
+| **Spring Boot Framework** | https://spring.io/projects/spring-boot| 
+| **JSON Web Token (JWT) Standard** | tools.ietf.org/html/rfc7519| 
+| **Software Architecture (Wikipedia)** | en.wikipedia.org/wiki/Software_architecture|
+| **HTML5 & Web API Standards** | html.spec.whatwg.org| 
+
 ### 3. SOFTWARE ARCHITECTURE
 
 The system follows a **Layered Architecture Style** combined with a **Client-Server** model, ensuring a clear separation of concerns and high maintainability. 
