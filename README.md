@@ -22,3 +22,7 @@ Web-based event announcement platform that connects organizers with participants
 ## Purpose
 
 Share event announcements and information in one place.
+
+## ARCHITECTURE.md Link
+
+https://github.com/ibrahim-cn/Event-Announcement-Site/blob/4b2471869919fd88d6249e15c6043bec7731b72d/ARCHITECTURE.md
