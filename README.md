@@ -6,7 +6,7 @@
 |-----------------|-----------|--------------------------------------
 | Sude Nur Yıldırım | 220513359 | https://github.com/sudeyldrm54     |
 | Hatice Çakı      | 220513379 |                                     |
-| İbrahim Can      | 220513376 |                                     |
+| İbrahim Can      | 220513376 |  https://github.com/ibrahim-cn      |
 | Berivan Alpagu   | 210502083 |                                     |
 
 ## Project introduction
