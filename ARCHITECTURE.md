@@ -1,4 +1,4 @@
-# Event-Advertisement-Site
+# Event-Announcement-Site
 ## Change History
 
 | Process | Date | Contributors | Description |
@@ -261,3 +261,75 @@ This diagram identifies the primary actors and their interactions with the syste
 
 * **Resource efficiency** is achieved by the choice of **Vanilla JS** and a file-based **H2 database**.
 * **Data safety** is ensured by a custom `DataSqlExportService`.
+
+### 12. APPENDICES
+
+#### A. Acronyms and Abbreviations
+
+| Acronym | Description |
+|---------|-------------|
+| UI | User Interface |
+| API | Application Programming Interface |
+| REST | Representational State Transfer |
+| DB | Database |
+| CRUD | Create, Read, Update, Delete |
+| HTTP | HyperText Transfer Protocol |
+| JSON | JavaScript Object Notation |
+| HTML | HyperText Markup Language |
+| CSS | Cascading Style Sheets |
+| JS | JavaScript |
+| Java | A programming language used for backend development |
+
+---
+
+#### B. Definitions
+
+| Term | Definition |
+|------|------------|
+| User | An individual who registers and interacts with the system by creating or managing events. |
+| Event | A data entity representing an activity created by a user. |
+| Authentication | The process of verifying user identity using login credentials. |
+| Authorization | The control mechanism that restricts actions based on user ownership. |
+| REST API | An architectural style used for communication between client and server. |
+| API Endpoint | A specific URL used to perform operations such as retrieving or sending data. |
+| Request | A message sent from the client to the server. |
+| Response | A message returned from the server to the client. |
+| Controller | A component that handles incoming HTTP requests and returns responses. |
+| Service Layer | A layer that contains business logic and interacts with the controller. |
+| CRUD Operations | Basic operations including Create, Read, Update, and Delete. |
+| Navbar | A navigation component used to move between pages. |
+| Toast Notification | A small message displayed to inform users about actions such as success or errors. |
+| LocalStorage | A browser-based storage used to persist application data. |
+| JWT | A token-based authentication mechanism used for secure communication |
+| H2 Database | A lightweight file-based database used for development and testing |
+
+---
+
+#### C. Design Principles
+
+##### C.1 Usability
+The system is designed with a user-centered approach to ensure an intuitive and easy-to-use interface, allowing users to navigate and perform actions without prior technical knowledge.
+
+##### C.2 Simplicity
+Only essential functionalities are implemented to minimize system complexity and enhance usability.
+
+##### C.3 Modularity
+The application is structured into independent modules such as controller, service, and user interface components.
+
+##### C.4 Reusability
+Functions and logic are implemented in a reusable manner to reduce redundancy and support scalability.
+
+##### C.5 Maintainability
+The codebase is organized and structured to facilitate easy updates, debugging, and future enhancements.
+
+##### C.6 Security Considerations
+Basic security mechanisms, including authentication and user-based authorization, are implemented to protect system integrity.
+
+##### C.7 Client-Side Efficiency
+Browser-based storage (LocalStorage) is utilized to ensure fast data access and efficient client-side operations.
+
+##### C.8 Feedback Mechanism
+The system provides immediate feedback to users through toast notifications for actions such as login, logout, and event creation.
+
+##### C.9 RESTful Design
+The backend follows RESTful principles by providing structured API endpoints for CRUD operations.
