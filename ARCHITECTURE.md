@@ -57,10 +57,10 @@ The **Event Announcement System** is a comprehensive full-stack solution designe
 | **JavaScript Tutorials and Guides** | https://developer.mozilla.org/en-US/docs/Web/HTML https://developer.mozilla.org/en-US/docs/Web/JavaScript|
 | **CSS: Cascading Style Sheets** | https://developer.mozilla.org/en-US/docs/Web/CSS| 
 | **The 4+1 View Model of Architecture** | https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
-| **Spring Boot Framework** | https://spring.io/projects/spring-boot| 
-| **JSON Web Token (JWT) Standard** | tools.ietf.org/html/rfc7519| 
-| **Software Architecture (Wikipedia)** | en.wikipedia.org/wiki/Software_architecture|
-| **HTML5 & Web API Standards** | html.spec.whatwg.org| 
+| **Spring Boot Framework** | https://spring.io/projects/spring-boot | 
+| **JSON Web Token (JWT) Standard** | tools.ietf.org/html/rfc7519 | 
+| **Software Architecture (Wikipedia)** | en.wikipedia.org/wiki/Software_architecture |
+| **HTML5 & Web API Standards** | html.spec.whatwg.org | 
 
 ### 3. SOFTWARE ARCHITECTURE
 
