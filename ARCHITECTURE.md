@@ -51,7 +51,49 @@ The **Event Announcement System** is a comprehensive full-stack solution designe
 
 ### 2. REFERENCES
 ### 3. SOFTWARE ARCHITECTURE
+
+The system follows a **Layered Architecture Style** combined with a **Client-Server** model, ensuring a clear separation of concerns and high maintainability. This architecture is articulated through the following views:
+
+ **A. Logical View (Layered Architecture Style)**
+The system is organized into distinct horizontal layers, each with specific responsibilities:
+* **Presentation Layer**: The user interface is built with modular HTML, CSS, and vanilla JavaScript, handling user interactions and RESTful API communication.
+* **Controller Layer**: Classes like `EventsController` and `AuthController` act as entry points, managing HTTP requests and routing them to appropriate services.
+* **Service Layer**: This "brain" of the application, including components like `EventRegistrationService`, enforces business rules, such as preventing event organizers from registering for their own events.
+* **Data Access Layer**: Utilizing **Spring Data JPA**, interfaces such as `EventRepository` and `AppUserRepository` abstract database operations from the business logic.
+
+**B. Process View (Stateless & Synchronized Style)**
+* **Stateless Communication**: The backend operates without storing session state on the server; instead, it supports continuous identity verification across requests.
+* **Transactional Synchronization**: The `DataSqlExportService` creates an automated runtime process where every database commit triggers a physical snapshot update to the `data.sql` file.
+
+**C. Development View (Modular Package Style)**
+* **Package Structure**: The project is strictly divided into `com.eventannouncement.model`, `.repository`, `.service`, and `.controller` packages.
+* **Structural Consistency**: All domain entities (User, Event, Category) inherit from a common `BaseEntity`, ensuring uniform auditing of IDs and creation dates.
+
+**D. Physical View (Embedded Deployment Style)**
+* **Application Server**: The system runs on the provided server
+* **Storage Infrastructure**: Data is persisted in a file-based **H2 Database** located on the local disk at `./data/eventdb`.
+
+ **E. Scenarios**
+* **Core Workflow**: When a user registers for an event (Logical), the system validates the request (Process) via specific code layers (Development) and permanently records the transaction in the physical database file (Physical).
+
+  
 ### 4. ARCHITECTURAL GOALS & CONSTRAINTS
+### 🎯 Architectural Goals & Constraints
+
+| Goal/Constraint | Feature | Description |
+| :--- | :--- | :--- |
+| **Architectural Goal** | **Data Consistency & Sync** | Ensuring that the application's physical state always matches the database via the automated `DataSqlExportService`. |
+| **Architectural Goal** | **Strict Business Logic Integrity** | Enforcing domain rules at the service layer, such as preventing organizers from registering for their own events. |
+| **Architectural Goal** | **Stateless Security** | Providing secure access without server-side session overhead by implementing JWT-based authentication. |
+| **Architectural Goal** | **System Maintainability** | Utilizing a layered package structure and `BaseEntity` inheritance to simplify future updates and debugging. |
+| **Architectural Goal** | **Resource Decoupling** | Separating the frontend static assets from the backend logic to enable independent UI development and testing. |
+| **Architectural Goal** | **Relational Reliability** | Using JPA constraints and Hibernate listeners to manage complex relationships between users, events, and categories. |
+| **Constraint** | **Language & Framework** | The system must be developed strictly using **Java 21** and **Spring Boot 3.4.4**. |
+| **Constraint** | **Database Selection** | Persistence is limited to a file-based **H2 Database** located at `./data/eventdb` for lightweight deployment. |
+| **Constraint** | **Security Protocol** | Authentication must be handled through the `JwtAuthenticationFilter` with stateless session management. |
+| **Constraint** | **Physical Resource Path** | Static frontend resources must be served from an external file path (`../frontend/`) as defined in system properties. |
+
+
 ### 5. ARCHITECTURAL DOCUMENTATION: LOGICAL VIEW
 # A. Domain Model and Data Structure
 The core of the system is built on a robust entity-relationship model that manages the lifecycle of events and user interactions.
