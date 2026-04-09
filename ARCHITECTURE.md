@@ -239,16 +239,25 @@ This diagram identifies the primary actors and their interactions with the syste
 
 | Category | Feature | Analysis & Metrics |
 | :--- | :--- | :--- |
-| **System Size** | **Data Footprint** | Persistence is managed via a file-based H2 database (`./data/eventdb`). The initial footprint is minimal (< 5MB), scaling linearly with user-generated events and registrations. |
-| **System Size** | **Resource Efficiency** | Built with vanilla JavaScript and CSS, the frontend avoids heavy frameworks. This results in extremely low bundle sizes, ensuring rapid page loads and high performance. |
+| **System Size** | **Data Footprint** | Persistence is managed via a file-based H2 database (`./data/eventdb`). The initial footprint is minimal (< 5MB / ~2.0 MB raw), scaling linearly with user-generated events and registrations. |
+| **System Size** | **Resource Efficiency** | Built with vanilla JavaScript and CSS, the frontend avoids heavy frameworks. This results in extremely low bundle sizes (~185 KB total payload), ensuring rapid page loads and high performance. |
+| **System Size** | **Backend Executable** | The system is compiled into a standalone Spring Boot JAR (~42.5 MB), optimized for lightweight deployment and compatible with environments supporting Java 21+. |
 | **Performance** | **Response Latency** | The stateless **JWT-based authentication** architecture eliminates server-side session overhead, targeting an API response time of **< 100ms** for CRUD operations. |
-| **Performance** | **Search Optimization** | The `script.js` implements a client-side "search-as-you-type" filter. By filtering a local array in **O(n)** time, the system provides zero-latency search results. |
 | **Performance** | **I/O Efficiency** | The `DataSqlExportService` runs synchronously after commits to ensure data safety. It is optimized to handle medium-scale snapshots without blocking the main execution thread. |
 | **Performance** | **Search Optimization** | The system employs a "local-data-filtering" strategy where event data is fetched in bulk and filtered in-memory via `script.js`. This eliminates redundant API calls during searching, providing an instantaneous user experience. |
 
-* **Search speed** is guaranteed by the `filterEvents()` function in a `script.js`.
-* **Resource efficiency** is achieved by the choice of **Vanilla JS** and a file-based **H2 database**.
-* **Data safety** is ensured by a custom `DataSqlExportService`.
 
 ### 11. QUALITY
 
+| Quality Attribute | Feature / Implementation | Description |
+| :--- | :--- | :--- |
+| **Security** | **JWT & Password Hashing** | Ensures secure, stateless authentication and protects user credentials using industry-standard hashing and WRITE_ONLY property constraints. |
+| **Integrity** | **Business Rule Enforcement** | Validates logical constraints, such as preventing duplicate event registrations and ensuring organizers cannot register for their own events. |
+| **Maintainability** | **Layered Architecture** | The separation of Controller, Service, and Repository layers allows for isolated updates and easier debugging without affecting the entire system. |
+| **Reliability** | **JSR-303 Validation** | Prevents corrupted data from entering the system by enforcing strict format and null-checks on incoming Data Transfer Objects (DTOs). |
+| **Auditability** | **BaseEntity Inheritance** | Automatically tracks system-wide metadata, including creation dates and record statuses for every entity in the database. |
+| **Scalability** | **ORM Abstraction** | Using Spring Data JPA and Hibernate ensures that the system can transition from H2 to enterprise databases (PostgreSQL/MySQL) with minimal code changes. |
+| **Robustness** | **Exception Handling** | Implements a centralized error handling mechanism to provide consistent JSON error responses and prevent internal stack traces from being exposed. |
+
+* **Resource efficiency** is achieved by the choice of **Vanilla JS** and a file-based **H2 database**.
+* **Data safety** is ensured by a custom `DataSqlExportService`.
