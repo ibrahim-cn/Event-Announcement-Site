@@ -46,6 +46,9 @@
 
 ### List of Figures:
 ### 1. SCOPE
+
+The **Event Announcement System** is a comprehensive full-stack solution designed to streamline the organization and discovery of diverse community events. Developed with a robust **Java 21** and **Spring Boot 3.4.4** backend, the system implements a sophisticated layered architecture that ensures seamless data flow between RESTful controllers and the **H2 database**. The core functionality revolves around a secure user ecosystem where enthusiasts can register, authenticate and manage their own event listings with complete ownership integrity. A standout feature of the technical scope is the **automated synchronization mechanism**, which triggers a physical `data.sql` update after every database transaction to maintain environment consistency across the development lifecycle. On the frontend, the platform offers a responsive, user-centric interface featuring real-time search filters and dynamic navigation bars that adapt to the user's login state. By enforcing strict business rules—such as preventing organizers from registering for their own events—and providing instant visual feedback through an integrated notification system, the project successfully bridges the gap between complex backend persistence and an intuitive, community-driven user experience.
+
 ### 2. REFERENCES
 ### 3. SOFTWARE ARCHITECTURE
 ### 4. ARCHITECTURAL GOALS & CONSTRAINTS
