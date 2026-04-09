@@ -15,21 +15,23 @@
 | **Finalizing Architectural Documentation** | April 2026 | Sude/Hatice | Our work has been documented in detail |
 
 ## Table of Contents
-1- Scope
-2- References
-3- Software Architecture
-4- Architectural Goals & Constraints
-5- Logical Architecture
-6- Process Architecture
-7- Development Architecture 
-8- Physical Architecture
-9- Scenarios
-10- Size and Performance
-11- Quality
+1-	Scope
+2-	References
+3-	Software Architecture
+4-	Architectural Goals & Constraints
+5-	Logical Architecture
+6-	Process Architecture
+7-	Development Architecture 
+8-	Physical Architecture
+9-	Scenarios
+10-	Size and Performance
+11-	Quality
+
 ## Appendices: 
-- Acronyms & Abbreviations
-- Definitions
-- Design Principles
+-	Acronyms & Abbreviations
+-	Definitions
+-	Design Principles
+
 
 ## List of Figures
 ## 1. SCOPE
