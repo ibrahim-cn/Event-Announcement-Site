@@ -44,12 +44,12 @@
 -	Design Principles
 
 
-## List of Figures
-## 1. SCOPE
-## 2. REFERENCES
-## 3. SOFTWARE ARCHITECTURE
-## 4. ARCHITECTURAL GOALS & CONSTRAINTS
-## 5. ARCHITECTURAL DOCUMENTATION: LOGICAL VIEW
+### List of Figures
+### 1. SCOPE
+### 2. REFERENCES
+### 3. SOFTWARE ARCHITECTURE
+### 4. ARCHITECTURAL GOALS & CONSTRAINTS
+### 5. ARCHITECTURAL DOCUMENTATION: LOGICAL VIEW
 # 1. Domain Model and Data Structure
 The core of the system is built on a robust entity-relationship model that manages the lifecycle of events and user interactions.
 •	**Foundation (BaseEntity):** All domain objects inherit from this abstract superclass. It ensures that every record in the system possesses a unique identity (ID), a record of creation (createdDate), and an operational status flag.
@@ -81,7 +81,7 @@ A unique logical feature of this architecture is the State Persistence Mechanism
  <img width="606" height="795" alt="image" src="https://github.com/user-attachments/assets/19dc31f4-f0f1-4c4c-8096-d043ca2a179b" />
 
 
-## 6. ARCHITECTURAL DOCUMENTATION: PROCESS VIEW
+### 6. ARCHITECTURAL DOCUMENTATION: PROCESS VIEW
 # 1. Request Processing Lifecycle
 The system operates as a stateless web application where each HTTP request is handled in an independent execution thread.
 •	Filter Chain Execution: Every incoming request first passes through the *SecurityConfig* filter chain.
@@ -119,7 +119,7 @@ The interactions between processes can be summarized in two main flows:
 5.	Export Thread executes: The data.sql file is overwritten with the latest snapshot of all tables (*categories, app_users, events, event_registrations*).
 
 
-## 7. ARCHITECTURAL DOCUMENTATION: DEVELOPMENT VIEW
+### 7. ARCHITECTURAL DOCUMENTATION: DEVELOPMENT VIEW
 # 1. Module Decomposition & Layering Strategy
 The project is built using a Strict Layered Architecture to ensure a separation of concerns. This allows developers to modify business logic without impacting the database schema or the API endpoints.
 •	Presentation Layer (*com.eventannouncement.controller*): Manages RESTful API endpoints. Controllers like *EventsController* and *AuthControlle*r handle HTTP request mapping and JSON serialization.
@@ -152,7 +152,7 @@ The code is organized to follow industry-standard conventions, making it easily 
 
 
 
-## 8. PHYSICAL VIEW: DEPLOYMENT & INFRASTRUCTURE
+### 8. PHYSICAL VIEW: DEPLOYMENT & INFRASTRUCTURE
 # 1. Runtime Environment & Processing
 The application is designed to be a lightweight, self-contained executable that minimizes external dependencies.
 **•	Execution Unit:** The system is packaged as a single Executable JAR file, which includes all necessary libraries and an embedded web server.
@@ -177,7 +177,7 @@ The physical security of the system's communication is managed through JWT (JSON
 **•	Token Storage:** Tokens are physically stored on the client side (e.g., *LocalStorage*).
 **•	Server-Side Validation:** The server uses a physical secret key *(app.jwt.secret*) and a 24-hour expiration setting (86400000 ms) to validate incoming tokens at the network boundary.
 
-## 9. SCENARIO VIEW 
+### 9. SCENARIO VIEW 
 # 1. Use Case Diagram
 
    <img width="605" height="339" alt="image" src="https://github.com/user-attachments/assets/f6113ab7-c913-4f8b-a270-fb7621375bd1" />
