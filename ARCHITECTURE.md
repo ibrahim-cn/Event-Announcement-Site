@@ -78,7 +78,6 @@ The system is organized into distinct horizontal layers, each with specific resp
 
   
 ### 4. ARCHITECTURAL GOALS & CONSTRAINTS
-### 🎯 Architectural Goals & Constraints
 
 | Goal/Constraint | Feature | Description |
 | :--- | :--- | :--- |
@@ -117,7 +116,7 @@ o	Cascade Cleanup: When an event is deleted, the service ensures all related reg
 •	AppUsersController: Manages the CRUD lifecycle of users, ensuring that user data can be updated or retrieved securely.
 •	AuthController: Handles the entry points for the application, specifically login and register scenarios.
 •	CategoriesController: Exposes the taxonomy of the system, allowing for the management of event categories.
-# D. Automated Developer Tooling (SQL Export Logic)
+# D. Automated Developer Tooling
 •	Real-time Monitoring: Through the use of Hibernate event listeners (*DataSqlExportIntegrator*), the system tracks every logical change (*Insert/Update/Delete*).
 •	Auto-Synchronization: Upon a successful transaction commit, the service automatically exports the current database state into a physical data.sql file. This ensures that the logical state of the development environment is always preserved and shareable via version control.
 
