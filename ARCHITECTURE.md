@@ -292,7 +292,7 @@ This diagram identifies the primary actors and their interactions with the syste
 | JS | JavaScript |
 | Java | A programming language used for backend development |
 
----
+
 
 #### B. Definitions
 
@@ -315,7 +315,7 @@ This diagram identifies the primary actors and their interactions with the syste
 | JWT | A token-based authentication mechanism used for secure communication |
 | H2 Database | A lightweight file-based database used for development and testing |
 
----
+
 
 #### C. Design Principles
 
