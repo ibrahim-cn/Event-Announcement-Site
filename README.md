@@ -5,9 +5,9 @@
 | Name            | Number    | GitHub Link                          |  
 |-----------------|-----------|--------------------------------------
 | Sude Nur Yıldırım | 220513359 | https://github.com/sudeyldrm54     |
-| Hatice Çakı      | 220513379 |                                     |
+| Hatice Çakı      | 220513379 |  https://github.com/cakihatice      |
 | İbrahim Can      | 220513376 |  https://github.com/ibrahim-cn      |
-| Berivan Alpagu   | 210502083 |                                     |
+| Berivan Alpagu   | 210502083 |  https://github.com/BerivanAlpagu   |
 
 ## Project introduction
 
