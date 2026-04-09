@@ -12,8 +12,7 @@
 | **Improving Frontend** | April 2026 | Sude | Improvements and enhancements have been made to the frontend. |
 | **Creating Database** | April 2026 | İbrahim | A database was created to run in parallel on the backend. |
 | **Integrating Database into the Backend** | April 2026 | Berivan/İbrahim | The database was integrated into the backend, and the inconsistencies that occurred were eliminated. |
-| **Finalizing Architectural Documentation** | April 2026 | Sude/Hatice | 
-Our work has been documented in detail|
+| **Finalizing Architectural Documentation** | April 2026 | Sude/Hatice | Our work has been documented in detail |
 
 ## Table of Contents
 1- Scope
