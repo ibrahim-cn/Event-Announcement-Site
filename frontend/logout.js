@@ -10,6 +10,7 @@ if (logoutLink) {
 
         // Remove user from storage
         localStorage.removeItem("currentUser");
+        localStorage.removeItem("accessToken");
 
         // Show toast notification
         showToast("Logged out successfully", "info");

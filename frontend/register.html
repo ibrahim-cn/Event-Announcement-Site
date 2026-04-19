@@ -1,5 +1,5 @@
 <!--
-Register: POST /api/auth/register — password stored as plain text in DB; returns JWT.
+Register via API (JWT authentication).
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +7,9 @@ Register: POST /api/auth/register — password stored as plain text in DB; retur
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./toast.css">
+  <link rel="stylesheet" href="./ui.css">
 </head>
 <body>
 
@@ -17,9 +19,10 @@ Register: POST /api/auth/register — password stored as plain text in DB; retur
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="create-event.html">Create Event</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="#" id="logoutLink">Logout</a></li>
+        <li id="loginLink"><a href="login.html">Login</a></li>
+        <li id="registerLink"><a href="register.html">Register</a></li>
+        <li id="userInfo"></li>
+        <li id="logoutLink"><a href="#">Logout</a></li>
       </ul>
     </nav>
   </header>
@@ -41,7 +44,11 @@ Register: POST /api/auth/register — password stored as plain text in DB; retur
     </div>
   </main>
 
-  <script src="auth.js"></script>
-  <script src="logout.js"></script>
+  <div id="toastContainer"></div>
+
+  <script src="./auth.js"></script>
+  <script src="./logout.js"></script>
+  <script src="./toast.js"></script>
+  <script src="./navbar.js"></script>
 </body>
 </html>
