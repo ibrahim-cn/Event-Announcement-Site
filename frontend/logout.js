@@ -1,18 +1,22 @@
 // This script logs the current user out
 // by removing currentUser from localStorage
-// and redirecting the user to the login page.
+// and updating the UI via reload
 
 const logoutLink = document.getElementById("logoutLink");
 
 if (logoutLink) {
-  logoutLink.addEventListener("click", function (e) {
-    e.preventDefault();
+    logoutLink.addEventListener("click", function (e) {
+        e.preventDefault();
 
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("accessToken");
+        // Remove user from storage
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("accessToken");
 
-    alert("You have logged out.");
+        // Show toast notification
+        showToast("Logged out successfully", "info");
 
-    window.location.href = "login.html";
-  });
+        setTimeout(() => {
+            location.reload();
+        }, 800);
+    });
 }

@@ -1,46 +1,53 @@
 <!--
-Login: POST /api/auth/login — password compared to app_users as stored; JWT in localStorage.
+This page allows registered users to log into the system.
+Successful login information is stored in localStorage as currentUser.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="ui.css">
 </head>
 <body>
 
-  <header>
-    <nav class="navbar">
-      <h1 class="logo">SportEvents</h1>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="create-event.html">Create Event</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="#" id="logoutLink">Logout</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <nav class="navbar">
+            <h1 class="logo">SportEvents</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create-event.html">Create Event</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="#" id="logoutLink">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <main class="form-page">
-    <div class="form-card">
-      <h2>Login</h2>
+    <main class="form-page">
+        <div class="form-card">
+            <h2>Login</h2>
 
-      <form id="loginForm">
-        <input type="email" id="loginEmail" placeholder="Email" required>
-        <input type="password" id="loginPassword" placeholder="Password" required>
-        <button type="submit" class="create-btn">Login</button>
-      </form>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <button type="submit" class="create-btn">Login</button>
+            </form>
 
-      <div id="loginMessage" class="preview-box">
-        <p>No login yet.</p>
-      </div>
-    </div>
-  </main>
+            <div id="loginMessage" class="preview-box">
+                <p>No login yet.</p>
+            </div>
+        </div>
+    </main>
 
-  <script src="auth.js"></script>
-  <script src="logout.js"></script>
+    <script src="auth.js"></script>
+    <script src="logout.js"></script>
+    <div id="toastContainer"></div>
+
+    <script src="toast.js"></script>
+    <script src="navbar.js"></script>
 </body>
 </html>
