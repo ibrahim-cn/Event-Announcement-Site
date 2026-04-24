@@ -27,7 +27,14 @@ async function loadCategories() {
       eventCategory.appendChild(opt);
     });
   } catch {
-    eventCategory.innerHTML = '<option value="1">Default</option>';
+    eventCategory.innerHTML = ` 
+    <option value="">Select Sport</option>
+    <option value="football">Football</option>
+    <option value="basketball">Basketball</option>
+    <option value="volleyball">Volleyball</option>
+    <option value="tennis">Tennis</option>
+    <option value="running">Running</option>
+    <option value="other">Other</option> `;
   }
 }
 
