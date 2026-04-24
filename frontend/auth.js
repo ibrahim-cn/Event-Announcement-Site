@@ -4,163 +4,98 @@ const API_BASE = "http://localhost:8081";
 const registerForm = document.getElementById("registerForm");
 const loginForm = document.getElementById("loginForm");
 
+
 function persistSession(data) {
-  localStorage.setItem("accessToken", data.token);
-  localStorage.setItem(
-    "currentUser",
-    JSON.stringify({
-      id: data.userId,
-      username: data.username,
-      email: data.email,
-    })
-  );
+    localStorage.setItem("accessToken", data.token);
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+            id: data.userId,
+            username: data.username,
+            email: data.email,
+        })
+    );
 }
 
 function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
 }
 
-/** message box: kind = success | error | info */
-function setFormFeedback(messageEl, kind, messageHtml) {
-  messageEl.className = "form-feedback form-feedback--" + kind;
-  messageEl.setAttribute("role", "alert");
-  messageEl.innerHTML = `<p class="form-feedback__text">${messageHtml}</p>`;
+// Display form feedback and trigger Toast notification
+function setFormFeedback(messageEl, kind, messageHtml, toastMsg) {
+    messageEl.className = "form-feedback form-feedback--" + kind;
+    messageEl.setAttribute("role", "alert");
+    messageEl.innerHTML = `<p class="form-feedback__text">${messageHtml}</p>`;
+
+    if (toastMsg) {
+        showToast(toastMsg, kind);
+    }
 }
 
-function parseApiError(bodyText, status) {
-  let fromServer = "";
-  try {
-    const j = JSON.parse(bodyText);
-    if (Array.isArray(j.errors) && j.errors.length > 0) {
-      fromServer = j.errors.join(" ");
-    } else {
-      fromServer = (j.message || j.detail || "").trim();
-    }
-    if (
-      !fromServer &&
-      typeof j.error === "string" &&
-      j.error !== "Conflict" &&
-      j.error !== "Bad Request"
-    ) {
-      fromServer = j.error;
-    }
-  } catch {
-    if (bodyText && bodyText.trim() && !bodyText.trim().startsWith("{")) {
-      fromServer = bodyText.trim();
-    }
-  }
-
-  if (fromServer) {
-    if (
-      fromServer.includes("Validation failed") &&
-      fromServer.includes("Error count:")
-    ) {
-      return escapeHtml(
-        "Some fields are invalid. Password must be at least 6 characters; use a valid email format."
-      );
-    }
-    return escapeHtml(fromServer);
-  }
-
-  if (status === 401) {
-    return escapeHtml("Invalid email or password.");
-  }
-  if (status === 409) {
-    return escapeHtml(
-      "This email is already registered. Sign in or use a different email."
-    );
-  }
-  if (status === 400) {
-    return escapeHtml(
-      "Invalid input. Check all fields (password must be at least 6 characters)."
-    );
-  }
-  return escapeHtml("Something went wrong (" + status + "). Please try again.");
-}
-
-function showError(messageEl, status, bodyText) {
-  setFormFeedback(messageEl, "error", parseApiError(bodyText, status));
-}
-
+//  Register Form Submission
 if (registerForm) {
-  registerForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
+    registerForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-    const username = document.getElementById("registerUsername").value;
-    const email = document.getElementById("registerEmail").value;
-    const password = document.getElementById("registerPassword").value;
-    const registerMessage = document.getElementById("registerMessage");
+        const username = document.getElementById("registerUsername").value;
+        const email = document.getElementById("registerEmail").value;
+        const password = document.getElementById("registerPassword").value;
+        const registerMessage = document.getElementById("registerMessage");
 
-    try {
-      const response = await fetch(`${API_BASE}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      });
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password }),
+            });
 
-      if (!response.ok) {
-        showError(registerMessage, response.status, await response.text());
-        return;
-      }
+            if (!response.ok) {
+                showToast("Registration failed. Please check your details.", "error");
+                return;
+            }
 
-      const data = await response.json();
-      persistSession(data);
-      setFormFeedback(
-        registerMessage,
-        "success",
-        "<strong>Success.</strong> Your account was created and you are signed in."
-      );
-      registerForm.reset();
-    } catch {
-      setFormFeedback(
-        registerMessage,
-        "info",
-        "Cannot reach the server. Is the backend running? (" +
-          escapeHtml(API_BASE) +
-          ")"
-      );
-    }
-  });
+            const data = await response.json();
+            persistSession(data);
+            showToast("Account created successfully! Welcome.", "success");
+
+            // Redirect to home after a short delay
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
+        } catch (err) {
+            showToast("Server connection error!", "error");
+        }
+    });
 }
 
+//  Login Form Submission
 if (loginForm) {
-  loginForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
+    loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    const loginMessage = document.getElementById("loginMessage");
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+        const loginMessage = document.getElementById("loginMessage");
 
-    try {
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
-      if (!response.ok) {
-        showError(loginMessage, response.status, await response.text());
-        return;
-      }
+            if (!response.ok) {
+                showToast("Invalid email or password.", "error");
+                return;
+            }
 
-      const data = await response.json();
-      persistSession(data);
-      setFormFeedback(
-        loginMessage,
-        "success",
-        "<strong>Success.</strong> Welcome, " + escapeHtml(data.username) + "."
-      );
-      loginForm.reset();
-    } catch {
-      setFormFeedback(
-        loginMessage,
-        "info",
-        "Cannot reach the server. Is the backend running? (" +
-          escapeHtml(API_BASE) +
-          ")"
-      );
-    }
-  });
+            const data = await response.json();
+            persistSession(data);
+            showToast("Login successful!", "success");
+
+            setTimeout(() => { window.location.href = "index.html"; }, 1000);
+        } catch (err) {
+            showToast("Cannot connect to server.", "error");
+        }
+    });
 }
