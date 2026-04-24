@@ -20,9 +20,13 @@ Successful login information is stored in localStorage as currentUser.
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="create-event.html">Create Event</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
-                <li><a href="#" id="logoutLink">Logout</a></li>
+
+                <li id="loginLink"><a href="login.html">Login</a></li>
+                <li id="registerLink"><a href="register.html">Register</a></li>
+
+                <li id="userInfo"></li>
+
+                <li id="logoutLink"><a href="#">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -43,11 +47,11 @@ Successful login information is stored in localStorage as currentUser.
         </div>
     </main>
 
-    <script src="auth.js"></script>
-    <script src="logout.js"></script>
     <div id="toastContainer"></div>
 
     <script src="toast.js"></script>
+    <script src="auth.js"></script>
+    <script src="logout.js"></script>
     <script src="navbar.js"></script>
 </body>
-</html>
+</html

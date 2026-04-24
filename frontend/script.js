@@ -10,60 +10,53 @@ const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
 const accessToken = localStorage.getItem("accessToken");
 
 async function loadCategoriesMap() {
-  try {
-    const r = await fetch(`${API_BASE}/api/categories`);
-    if (!r.ok) return;
-    const list = await r.json();
-    categoryNames = Object.fromEntries(
-      list.map((c) => [String(c.id), c.categoryName || "—"])
-    );
-  } catch {
-    categoryNames = {};
-  }
+    try {
+        const r = await fetch(`${API_BASE}/api/categories`);
+        if (!r.ok) return;
+        const list = await r.json();
+        categoryNames = Object.fromEntries(
+            list.map((c) => [String(c.id), c.categoryName || "—"])
+        );
+    } catch {
+        categoryNames = {};
+    }
 }
 
 function formatEventDate(event) {
-  if (!event.date) return "—";
-  const s = typeof event.date === "string" ? event.date : String(event.date);
-  return s.length >= 10 ? s.slice(0, 10) : s;
+    if (!event.date) return "—";
+    const s = typeof event.date === "string" ? event.date : String(event.date);
+    return s.length >= 10 ? s.slice(0, 10) : s;
 }
 
 function categoryLabel(event) {
-  
-  const map= {
-    1: "Football",
-    2: "Basketball",
-    3: "Volleyball",
-    4: "Tennis",
-    5: "Running",
-    6: "Other",
-  }
-  return categoryNames[id] || (id ? `#${id}` : "—");
+    if (event.categoryName) return event.categoryName;
+    const id = event.categoryId != null ? String(event.categoryId) : "";
+    return categoryNames[id] || (id ? `#${id}` : "—");
 }
 
 function displayEvents(filteredEvents = events) {
-  eventList.innerHTML = "";
+    eventList.innerHTML = "";
 
-  if (filteredEvents.length === 0) {
-    eventList.innerHTML = "<p>No events found.</p>";
-    return;
-  }
-
-  filteredEvents.forEach((event) => {
-    const eventCard = document.createElement("div");
-    eventCard.classList.add("event-card");
-
-    const isOwner =
-      currentUser && event.appUserId != null && Number(event.appUserId) === Number(currentUser.id);
-
-    let deleteButton = "";
-    if (isOwner) {
-      deleteButton = `<button type="button" class="delete-btn" data-action="delete" data-id="${event.id}">Cancel Event</button>`;
+    if (filteredEvents.length === 0) {
+        eventList.innerHTML = "<p>No events found.</p>";
+        return;
     }
 
-    const registerButton = `<button type="button" class="create-btn register-btn" data-action="register" data-id="${event.id}">Register for event</button>`;
+    filteredEvents.forEach((event) => {
+        const eventCard = document.createElement("div");
+        eventCard.classList.add("event-card");
 
-    eventCard.innerHTML = `
+        const isOwner =
+            currentUser && event.appUserId != null && Number(event.appUserId) === Number(currentUser.id);
+
+        let deleteButton = "";
+        if (isOwner) {
+            deleteButton = `<button type="button" class="delete-btn" data-action="delete" data-id="${event.id}">Cancel Event</button>`;
+        }
+
+        const registerButton = `<button type="button" class="create-btn register-btn" data-action="register" data-id="${event.id}">Register for event</button>`;
+
+        eventCard.innerHTML = `
       <h3>${escapeHtml(event.title || "")}</h3>
       <p>Date: ${escapeHtml(formatEventDate(event))}</p>
       <p>Location: ${escapeHtml(event.location || "")}</p>
@@ -74,93 +67,98 @@ function displayEvents(filteredEvents = events) {
       ${deleteButton}
     `;
 
-    eventList.appendChild(eventCard);
-  });
+        eventList.appendChild(eventCard);
+    });
 }
 
 function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
 }
 
 eventList.addEventListener("click", async (e) => {
-  const btn = e.target.closest("button[data-action]");
-  if (!btn) return;
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
 
-  const id = Number(btn.dataset.id);
-  if (btn.dataset.action === "register") {
-    if (!accessToken) {
-      alert("Please sign in or register before signing up for an event.");
-      window.location.href = "login.html";
-      return;
-    }
-    try {
-      const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      if (res.status === 401) {
-        alert("Your session is invalid. Please sign in again.");
-        window.location.href = "login.html";
-        return;
-      }
-      const text = await res.text();
-      if (!res.ok) {
-        alert(text || res.statusText);
-        return;
-      }
-      alert("You are now registered for this event.");
-    } catch {
-      alert("Cannot reach the server. Is the backend running?");
-    }
-    return;
-  }
+    const id = Number(btn.dataset.id);
 
-  if (btn.dataset.action === "delete") {
-    if (!accessToken) return;
-    try {
-      const res = await fetch(`${API_BASE}/api/events/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const text = await res.text();
-      if (!res.ok) {
-        alert(text || res.statusText);
+    // REGISTER ACTION
+    if (btn.dataset.action === "register") {
+        if (!accessToken) {
+            showToast("Please sign in or register before signing up for an event.", "info");
+            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+            return;
+        }
+        try {
+            const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            if (res.status === 401) {
+                showToast("Your session is invalid. Please sign in again.", "error");
+                setTimeout(() => { window.location.href = "login.html"; }, 1500);
+                return;
+            }
+            const text = await res.text();
+            if (!res.ok) {
+                showToast(text || "Registration failed.", "error");
+                return;
+            }
+            showToast("You are now registered for this event!", "success");
+        } catch {
+            showToast("Cannot reach the server. Is the backend running?", "error");
+        }
         return;
-      }
-      await loadEvents();
-    } catch {
-      alert("Cannot reach the server.");
     }
-  }
+
+    // DELETE ACTION
+    if (btn.dataset.action === "delete") {
+        if (!accessToken) return;
+        try {
+            const res = await fetch(`${API_BASE}/api/events/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+            if (!res.ok) {
+                const text = await res.text();
+                showToast(text || "Could not cancel event.", "error");
+                return;
+            }
+            showToast("Event cancelled successfully.", "success");
+            await loadEvents();
+        } catch {
+            showToast("Cannot reach the server.", "error");
+        }
+    }
 });
 
 function filterEvents() {
-  const searchText = searchInput.value.toLowerCase();
-  const filteredEvents = events.filter(
-    (event) =>
-      (event.title || "").toLowerCase().includes(searchText) ||
-      (event.location || "").toLowerCase().includes(searchText)
-  );
-  displayEvents(filteredEvents);
+    const searchText = searchInput.value.toLowerCase();
+    const filteredEvents = events.filter(
+        (event) =>
+            (event.title || "").toLowerCase().includes(searchText) ||
+            (event.location || "").toLowerCase().includes(searchText)
+    );
+    displayEvents(filteredEvents);
 }
 
 searchInput.addEventListener("input", filterEvents);
 
 async function loadEvents() {
-  try {
-    await loadCategoriesMap();
-    const r = await fetch(`${API_BASE}/api/events`);
-    if (!r.ok) {
-      eventList.innerHTML = "<p>Events could not be loaded.</p>";
-      return;
+    try {
+        await loadCategoriesMap();
+        const r = await fetch(`${API_BASE}/api/events`);
+        if (!r.ok) {
+            eventList.innerHTML = "<p>Events could not be loaded.</p>";
+            return;
+        }
+        events = await r.json();
+        displayEvents(events);
+    } catch {
+        eventList.innerHTML = `<p>Cannot reach API at ${API_BASE}. Start the backend.</p>`;
+        showToast("API connection failed!", "error");
     }
-    events = await r.json();
-    displayEvents(events);
-  } catch {
-    eventList.innerHTML = `<p>Cannot reach API at ${API_BASE}. Start the backend.</p>`;
-  }
 }
 
 loadEvents();
