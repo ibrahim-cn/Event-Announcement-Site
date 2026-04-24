@@ -48,19 +48,19 @@ if (!currentUser || !accessToken) {
   `;
   }
 } else {
-  loadCategories();
+  //loadCategories();
 
   eventForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const categoryId = Number(eventCategory.value);
+    const categoryId = eventCategory.value;
     const payload = {
       title: eventTitle.value,
       description: eventDescription.value,
       date: eventDate.value ? `${eventDate.value}T12:00:00` : null,
       time: "",
       location: eventLocation.value,
-      categoryId: Number.isFinite(categoryId) ? categoryId : null,
+      categoryId: categoryId,
     };
 
     try {
