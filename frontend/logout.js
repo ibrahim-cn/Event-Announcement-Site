@@ -8,15 +8,13 @@ if (logoutLink) {
     logoutLink.addEventListener("click", function (e) {
         e.preventDefault();
 
-        // Remove user from storage
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("accessToken");
-
         // Show toast notification
-        showToast("Logged out successfully", "info");
+        showToast("Logged out successfully.", "success");
 
+        
         setTimeout(() => {
-            location.reload();
-        }, 800);
+            localStorage.clear();
+            window.location.href = "index.html";
+        }, 1000);
     });
 }
