@@ -29,8 +29,15 @@ function formatEventDate(event) {
 }
 
 function categoryLabel(event) {
-  if (event.categoryName) return event.categoryName;
-  const id = event.categoryId != null ? String(event.categoryId) : "";
+  
+  const map= {
+    1: "Football",
+    2: "Basketball",
+    3: "Volleyball",
+    4: "Tennis",
+    5: "Running",
+    6: "Other",
+  }
   return categoryNames[id] || (id ? `#${id}` : "—");
 }
 

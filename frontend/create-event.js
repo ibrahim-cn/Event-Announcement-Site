@@ -27,14 +27,14 @@ async function loadCategories() {
       eventCategory.appendChild(opt);
     });
   } catch {
-    eventCategory.innerHTML = ` 
+    eventCategory.innerHTML = `
     <option value="">Select Sport</option>
-    <option value="football">Football</option>
-    <option value="basketball">Basketball</option>
-    <option value="volleyball">Volleyball</option>
-    <option value="tennis">Tennis</option>
-    <option value="running">Running</option>
-    <option value="other">Other</option> `;
+    <option value="1"football">Football</option>
+    <option value="2"basketball">Basketball</option>
+    <option value="3"volleyball">Volleyball</option>
+    <option value="4"tennis">Tennis</option>
+    <option value="5"running">Running</option>
+    <option value="6"other">Other</option>`;
   }
 }
 
@@ -53,14 +53,14 @@ if (!currentUser || !accessToken) {
   eventForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const categoryId = eventCategory.value;
+    const categoryId = Number(eventCategory.value);
     const payload = {
       title: eventTitle.value,
       description: eventDescription.value,
       date: eventDate.value ? `${eventDate.value}T12:00:00` : null,
       time: "",
       location: eventLocation.value,
-      categoryId: categoryId,
+      categoryId: Number.isFinite(categoryId) ? categoryId : null,
     };
 
     try {
