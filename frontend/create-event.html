@@ -18,10 +18,11 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="create-event.html">Create Event</a></li>
 
+               
                 <li id="loginLink"><a href="login.html">Login</a></li>
                 <li id="registerLink"><a href="register.html">Register</a></li>
 
-                <li id="userInfo" style="color: white; font-weight: bold;"></li>
+                <li id="userInfo"></li>
 
                 <li id="logoutLink"><a href="#">Logout</a></li>
             </ul>
@@ -38,7 +39,13 @@
                 <input type="text" id="eventLocation" placeholder="Location" required>
 
                 <select id="eventCategory" required>
-                    <option value="sports">Sports</option>
+                    <option value ="">Select Sport</option>
+                    <option value="football">Football</option>
+                    <option value="basketball">Basketball</option>
+                    <option value="volleyball">Volleyball</option>
+                    <option value="tennis">Tennis</option>
+                    <option value="running">Running</option>
+                    <option value="other">Other</option>
                 </select>
 
                 <textarea id="eventDescription" placeholder="Event Description" rows="5" required></textarea>
@@ -51,6 +58,7 @@
                 <p>No event created yet.</p>
             </div>
         </div>
+    
     </main>
 
     <div id="toastContainer"></div>
