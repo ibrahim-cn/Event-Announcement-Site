@@ -16,6 +16,7 @@ INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "P
 INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (2, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'mehmet@gmail.com', '123456', '+90 533 222 22 22', 'https://i.pravatar.cc/200?img=12', 'Mehmet');
 INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (3, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'ayse@gmail.com', '123456', '+90 533 333 33 33', 'https://i.pravatar.cc/200?img=5', 'Ayse');
 INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (4, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'can@gmail.com', '123456', '+90 533 444 44 44', 'https://i.pravatar.cc/200?img=8', 'Can');
+INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (5, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'admin@event.web', '123456', '+90 555 555 55 55', 'https://i.pravatar.cc/200?img=11', 'Admin');
 
 INSERT INTO "EVENTS" ("ID", "CREATED_DATE", "STATUS", "APP_USER_ID", "CATEGORY_ID", "DATE", "DESCRIPTION", "LOCATION", "TIME", "TITLE", "IMAGE_URL")
 SELECT
@@ -55,7 +56,14 @@ SELECT
         WHEN 5 THEN 'Running Event #' || X
         ELSE 'Other Sports Event #' || X
     END,
-    'https://picsum.photos/seed/event-' || X || '/1200/700'
+    CASE MOD(X - 1, 6) + 1
+        WHEN 1 THEN 'https://loremflickr.com/600/400/football,sport?lock=' || X
+        WHEN 2 THEN 'https://loremflickr.com/600/400/basketball,sport?lock=' || X
+        WHEN 3 THEN 'https://loremflickr.com/600/400/volleyball,sport?lock=' || X
+        WHEN 4 THEN 'https://loremflickr.com/600/400/tennis,sport?lock=' || X
+        WHEN 5 THEN 'https://loremflickr.com/600/400/running,sport?lock=' || X
+        ELSE 'https://loremflickr.com/600/400/stadium,sport?lock=' || X
+    END
 FROM SYSTEM_RANGE(1, 100);
 
 -- Seed registrations so organizers can test contact visibility.

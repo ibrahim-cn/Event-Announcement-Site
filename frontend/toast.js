@@ -2,6 +2,7 @@
 // It allows showing temporary messages (success, error, info)
 // on the screen to give feedback to the user.
 function showToast(message, type = "info") {
+    console.log("Showing toast:", message, "Type:", type);
     const container = document.getElementById("toastContainer");
 
     if (!container) return;

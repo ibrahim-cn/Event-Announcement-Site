@@ -100,14 +100,22 @@ if (loginForm) {
             });
 
             if (!response.ok) {
-                let message = "Invalid email or password.";
+                let message = "Account not found or invalid credentials.";
                 try {
                     const errorBody = await response.json();
                     message = extractErrorMessage(errorBody, message);
                 } catch {
                     // ignore parse errors and use fallback
                 }
+                
                 showToast(message, "error");
+                
+                const registerPrompt = document.getElementById("registerPrompt");
+                if (registerPrompt) {
+                    registerPrompt.style.display = "block";
+                    registerPrompt.classList.add("shake-animation");
+                    setTimeout(() => registerPrompt.classList.remove("shake-animation"), 500);
+                }
                 return;
             }
 
@@ -115,7 +123,13 @@ if (loginForm) {
             persistSession(data);
             showToast("Login successful!", "success");
 
-            setTimeout(() => { window.location.href = "index.html"; }, 1000);
+            setTimeout(() => { 
+                if (data.email === "admin@event.web") {
+                    window.location.href = "admin.html";
+                } else {
+                    window.location.href = "index.html"; 
+                }
+            }, 1000);
         } catch (err) {
             showToast("Cannot connect to server.", "error");
         } finally {
