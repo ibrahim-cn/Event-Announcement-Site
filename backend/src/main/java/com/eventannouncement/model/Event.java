@@ -20,6 +20,9 @@ public class Event extends BaseEntity {
 
     private String location = "";
 
+    @Column(name = "image_url")
+    private String imageUrl = "";
+
     // --- Category Relationship (ManyToOne) ---
     @Column(name = "category_id")
     private Long categoryId;
@@ -80,6 +83,14 @@ public class Event extends BaseEntity {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Long getCategoryId() {

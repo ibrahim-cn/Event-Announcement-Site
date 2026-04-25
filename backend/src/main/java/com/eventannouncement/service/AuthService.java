@@ -32,11 +32,12 @@ public class AuthService {
         AppUser user = new AppUser();
         user.setUsername(request.username().trim());
         user.setEmail(email);
+        user.setPhone(request.phone().trim());
         user.setPassword(request.password());
         appUserRepository.save(user);
 
         String token = jwtService.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail());
+        return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getProfileImageUrl());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -50,7 +51,7 @@ public class AuthService {
         }
 
         String token = jwtService.generateToken(user.getEmail());
-        return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail());
+        return new AuthResponse(token, user.getId(), user.getUsername(), user.getEmail(), user.getPhone(), user.getProfileImageUrl());
     }
 
     private static String normalizeEmail(String email) {

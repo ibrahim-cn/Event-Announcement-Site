@@ -2,19 +2,16 @@
 // by removing currentUser from localStorage
 // and updating the UI via reload
 
-const logoutLink = document.getElementById("logoutLink");
+document.addEventListener("click", function (e) {
+    const logoutTarget = e.target.closest("[data-action='logout']");
+    if (!logoutTarget) return;
 
-if (logoutLink) {
-    logoutLink.addEventListener("click", function (e) {
-        e.preventDefault();
+    e.preventDefault();
+    showToast("Logged out successfully.", "success");
 
-        // Show toast notification
-        showToast("Logged out successfully.", "success");
-
-        
-        setTimeout(() => {
-            localStorage.clear();
-            window.location.href = "index.html";
-        }, 1000);
-    });
-}
+    setTimeout(() => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("currentUser");
+        window.location.href = "index.html";
+    }, 1000);
+});

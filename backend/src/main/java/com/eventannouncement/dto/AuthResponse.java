@@ -4,5 +4,7 @@ public record AuthResponse(
         String token,
         Long userId,
         String username,
-        String email
+        String email,
+        String phone,
+        String profileImageUrl
 ) {}
