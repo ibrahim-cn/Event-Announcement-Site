@@ -13,6 +13,7 @@
 | **Creating Database** | April 2026 | İbrahim | A database was created to run in parallel on the backend. |
 | **Integrating Database into the Backend** | April 2026 | Berivan/İbrahim | The database was integrated into the backend, and the inconsistencies that occurred were eliminated. |
 | **Finalizing Architectural Documentation** | April 2026 | Sude/Hatice | Our work has been documented in detail |
+| **Final Part for the Project** | April 10th-26th 2026 | All Team | The project has been further developed, bugs have been fixed, and new features have been added. Our documents are finalized. |
 
 ## Table of Contents
 1-	Scope
@@ -87,6 +88,40 @@ The system follows a **Layered Architecture Style** combined with a **Client-Ser
  **E. Scenarios**
 * **Core Workflow**: When a user registers for an event (Logical), the system validates the request (Process) via specific code layers (Development) and permanently records the transaction in the physical database file (Physical).
 
+
+### ARCHITECTURE EVOLUTION & FEATURE UPDATES
+The Event Announcement System has evolved from a basic functional prototype into a sophisticated, high-integrity Full-Stack Enterprise-Grade platform. This evolution focuses on four main pillars: Security Hardening, Automated Data Integrity, Administrative Governance, and Modern User Experience (UX).
+# 1. Structural Foundation & Data Integrity
+•	Logical Inheritance (BaseEntity): A major structural shift was the introduction of the BaseEntity abstract class. This unified all domain models (AppUser, Event, Category), ensuring standardized auditing with id, createdDate, and status fields across the entire database schema.
+•	Automated Data Synchronization: The implementation of the DataSqlExportService introduced a "Physical Snapshot" mechanism. It utilizes TransactionSynchronizationManager to automatically update the physical data.sql file after every successful database commit, ensuring continuous development environment parity for the entire team.
+•	Complex Business Logic: The service layer was expanded with AccountService and EventRegistrationService to manage intricate operations like "Cascading Deletes". When a user deletes their account, the system now automatically purges all associated registrations and hosted events to maintain perfect referential integrity.
+# 2. Security & Stateless Authentication
+•	Stateless Security Model: The backend was hardened using Spring Security and JWT (JSON Web Token). The SecurityConfig defines a strict stateless session policy, requiring a valid Bearer token for all sensitive operations while keeping public viewing routes accessible.
+•	Data Encapsulation: Security was further enhanced at the model level by enforcing WRITE_ONLY constraints on passwords. This ensures that sensitive credentials are never leaked in JSON responses.
+# 3. Administrative Ecosystem (Admin Panel)
+•	Admin Governance: A dedicated Admin Dashboard (admin.html & admin.js) was introduced to provide high-level management capabilities.
+•	Role-Based Access Control: The system now identifies administrative users and dynamically provides access to global event management, user editing, and participant roster controls.
+•	Granular Management: Admins and event organizers can now view detailed participant contact information and cancel specific registrations, a feature supported by the specialized EventRegistrantContactDto and corresponding service methods.
+# 4. Frontend Engineering & Modern UX (Custom Implementation)
+The presentation layer underwent a total transformation to provide a responsive and interactive user experience:
+•	Simplified Event Interaction: To reduce user confusion, the redundant mix of Login/Register/Logout buttons on event pages was removed. Guest users are now presented only with a "Register" option, which utilizes the Pending Registration Intent pattern to cache the user's intent, handle the login flow, and automatically prompt them to complete the registration upon their return.
+•	Smart Login Feedback & UX: The authentication flow now features an Intelligent Account Guard. If a login attempt fails because an account does not exist, the UI dynamically displays a "Register Prompt" with a shake animation to visually guide the user toward account creation instead of just showing a generic error.
+•	Dynamic Identity Navigation (navbar.js): The navigation bar implements Conditional Rendering to adapt to the user's login state. It renders personalized dropdowns, dynamic avatars (or initial-based placeholders), and context-aware links based on the active JWT session.
+•	Real-Time Feedback System (toast.js & toast.css): A custom, non-blocking Toast Notification System replaced intrusive browser alerts. It provides color-coded, animated feedback (Success, Error, Info) with smooth cubic-bezier transitions.
+•	Adaptive Content & Theming:
+Theme Engine: Persistent Dark/Light Mode support was integrated using localStorage and CSS variables.
+Intelligent Asset Handling: The system utilizes a Category-Based Image Resolver, automatically selecting high-quality sport-specific fallbacks (e.g., Football, Basketball, Tennis) if a custom image URL is not provided.
+
+
+| Component      | Technical Implementation                          | Result                                                      |
+|----------------|--------------------------------------------------|-------------------------------------------------------------|
+| Security       | JWT + Spring Security Filter Chain               | Stateless, token-based secure access.                       |
+| UX Logic       | Pending Intent & Shake Animation                 | Reduced user friction and smart account guidance.           |
+| UI Feedback    | Custom Toast System                             | Professional, real-time status updates without blocking.    |
+| Data Sync      | Transactional data.sql Auto-Export              | Automated team-wide database parity.                        |
+| Admin Layer    | Role-Based Dashboard & CRUD                     | Centralized system and event governance.                    |
+| Integrity      | Cascading Service-Level Deletion                | Zero orphaned records across the domain.                    |
+| Logic          | Adaptive Image Fallbacks                        | High-quality visual consistency for all categories.         |
   
 ### 4. ARCHITECTURAL GOALS & CONSTRAINTS
 
@@ -106,30 +141,36 @@ The system follows a **Layered Architecture Style** combined with a **Client-Ser
 
 ### 5. ARCHITECTURAL DOCUMENTATION: LOGICAL VIEW
 # A. Domain Model and Data Structure
-The core of the system is built on a robust entity-relationship model that manages the lifecycle of events and user interactions.
-•	**Foundation (BaseEntity):** All domain objects inherit from this abstract superclass. It ensures that every record in the system possesses a unique identity (ID), a record of creation (createdDate), and an operational status flag.
-• **User Management (AppUser):** Represents the primary actor. It manages personal credentials and acts as the "Organizer" for events through a One-to-Many relationship.
-•	**Event Categorization (Category):** Provides a logical grouping for events (e.g., Seminar, Football Match, Workshop), allowing for structured data retrieval and better user experience.
-•	**Event Core (Event):** The central entity holding metadata such as title, description, location, and timing. It maintains Many-to-One relationships with both Category and AppUser.
-•	**Participation Logic (EventRegistration):** A junction entity used to bridge users and events. It enforces a Unique Constraint to ensure a user cannot register for the same event more than once.
+The core of the system is built on a robust entity-relationship model that manages the lifecycle of events, user interactions, and administrative governance.
+•	**Foundation (BaseEntity):** All domain objects inherit from this abstract superclass. It ensures that every record in the system possesses a unique identity (ID), a record of creation (createdDate), and an operational status flag to maintain auditability.
+•	**User Lifecycle (AppUser):** Represents the primary actor with expanded profile capabilities. It manages personal credentials, profile image paths, and acts as the "Organizer" for events through a One-to-Many relationship.
+•	**Event Core (Event):** The central entity holding metadata such as title, location, and timing. It maintains Many-to-One relationships with Categories and Organizers, supporting dynamic image resolution based on category types.
+•	**Administrative Taxonomy (Category):** Provides a logical grouping for sports events (e.g., Football, Basketball). It allows for structured data retrieval and is managed via an Admin-only interface for system-wide consistency.
+•	**Participation Logic (EventRegistration):** A junction entity used to bridge users and events. It enforces referential integrity to ensure unique participation records and supports organizer-led cancellation workflows.
+
 # B. Service Layer & Business Intelligence
-The Service layer serves as the "brain" of the application, encapsulating the rules that govern the system's behavior.
+The Service layer serves as the "brain" of the application, encapsulating complex business rules and account lifecycle management.
+•	**Account & Profile Management (AccountService):**
+Profile Orchestration: Manages user profile updates, including physical image persistence and account data synchronization.
+Cascading Account Deletion: Implements a complex cleanup logic where deleting a user account automatically purges all associated registrations and hosted events to prevent orphaned data.
 •	**Identity & Security (AuthService):**
-o	Email Normalization: Systematically converts emails to lowercase and trims whitespace to prevent logical duplication.
-o	Stateless Authentication: Integrates with JWT logic to provide secure, token-based access.
-•	**Registration Integrity (EventRegistrationService):**
-o	Self-Registration Guard: Logically prevents an organizer from registering for an event they created.
-o	Validation: Ensures that both the event and the user exist and are active before confirming participation.
-•	**Lifecycle Management (EventService):**
-o	Cascade Cleanup: When an event is deleted, the service ensures all related registrations are purged first to maintain referential integrity.
+Stateless Authorization: Integrates with JWT logic to provide secure, token-based access. It handles email normalization and sensitive credential protection via WRITE_ONLY constraints.
+•	**Registration Intelligence (EventRegistrationService):**
+Ownership Guard: Logically prevents organizers from registering for their own events.
+Contact Exposure: Provides organizers with secure access to participant contact details (email/phone) for logistical coordination.
+
 # C. API Design & Functional Exposure
-•	EventsController: Provides endpoints for creating, listing, and deleting events, specifically filtering actions based on the organizer's identity.
-•	AppUsersController: Manages the CRUD lifecycle of users, ensuring that user data can be updated or retrieved securely.
-•	AuthController: Handles the entry points for the application, specifically login and register scenarios.
-•	CategoriesController: Exposes the taxonomy of the system, allowing for the management of event categories.
+•	**Events & Registrations (EventsController):** Provides comprehensive endpoints for the event lifecycle, including participant management and organizer-only deletion rights.
+•	**Account & Admin Gateway (AccountController & Admin.js):**
+Personalized Dashboard: Manages the /api/account/me endpoints for user self-service and profile customization.
+Administrative Control: Dedicated modules provide privileged access for system-wide event editing and participant removal.
+•	**Resource Management (UploadController):** Handles Multipart file uploads for profile and event images, enforcing size and MIME-type constraints.
+•	**Taxonomy Exposure (CategoriesController):** Exposes the system's category structure, supporting dynamic frontend filtering and metadata mapping.
+
 # D. Automated Developer Tooling
-•	Real-time Monitoring: Through the use of Hibernate event listeners (*DataSqlExportIntegrator*), the system tracks every logical change (*Insert/Update/Delete*).
-•	Auto-Synchronization: Upon a successful transaction commit, the service automatically exports the current database state into a physical data.sql file. This ensures that the logical state of the development environment is always preserved and shareable via version control.
+•	**Transaction Synchronization:** Through the use of TransactionSynchronizationManager, the system tracks successful database commits.
+•	**Physical State Parity:** The DataSqlExportService automatically exports the H2 database state into a physical data.sql file after each successful transaction. This ensures that the logical state of the development environment (including 100+ seeded sport events) is always preserved and synchronized via version control.
+
 
  <img width="606" height="795" alt="image" src="https://github.com/user-attachments/assets/19dc31f4-f0f1-4c4c-8096-d043ca2a179b" />
 
