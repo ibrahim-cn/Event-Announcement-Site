@@ -1,9 +1,94 @@
--- Auto-generated snapshot (categories, app_users, events, event_registrations).
--- Overwritten after each INSERT/UPDATE/DELETE; commit to share with teammates.
-
 SET REFERENTIAL_INTEGRITY FALSE;
+DELETE FROM "EVENT_REGISTRATIONS";
 DELETE FROM "EVENTS";
 DELETE FROM "APP_USERS";
+DELETE FROM "CATEGORIES";
 SET REFERENTIAL_INTEGRITY TRUE;
 
-INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "USERNAME") VALUES (1, TIMESTAMP '2026-04-20T02:04:21.216790', TRUE, '123@gmail.com', '123456', 'Hatice');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (1, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Football');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (2, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Basketball');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (3, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Volleyball');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (4, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Tennis');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (5, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Running');
+INSERT INTO "CATEGORIES" ("ID", "CREATED_DATE", "STATUS", "CATEGORY_NAME") VALUES (6, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'Other');
+
+INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (1, TIMESTAMP '2026-04-25T19:30:00', TRUE, '123@gmail.com', '123456', '+90 533 111 11 11', 'https://i.pravatar.cc/200?img=1', 'Hatice');
+INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (2, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'mehmet@gmail.com', '123456', '+90 533 222 22 22', 'https://i.pravatar.cc/200?img=12', 'Mehmet');
+INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (3, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'ayse@gmail.com', '123456', '+90 533 333 33 33', 'https://i.pravatar.cc/200?img=5', 'Ayse');
+INSERT INTO "APP_USERS" ("ID", "CREATED_DATE", "STATUS", "EMAIL", "PASSWORD", "PHONE", "PROFILE_IMAGE_URL", "USERNAME") VALUES (4, TIMESTAMP '2026-04-25T19:30:00', TRUE, 'can@gmail.com', '123456', '+90 533 444 44 44', 'https://i.pravatar.cc/200?img=8', 'Can');
+
+INSERT INTO "EVENTS" ("ID", "CREATED_DATE", "STATUS", "APP_USER_ID", "CATEGORY_ID", "DATE", "DESCRIPTION", "LOCATION", "TIME", "TITLE", "IMAGE_URL")
+SELECT
+    X,
+    DATEADD('MINUTE', X, TIMESTAMP '2026-04-25T20:00:00'),
+    TRUE,
+    CASE MOD(X, 4)
+        WHEN 0 THEN 1
+        WHEN 1 THEN 2
+        WHEN 2 THEN 3
+        ELSE 4
+    END,
+    MOD(X - 1, 6) + 1,
+    DATEADD('DAY', X, TIMESTAMP '2026-05-01T10:00:00'),
+    CASE MOD(X - 1, 6) + 1
+        WHEN 1 THEN 'Friendly football session #' || X
+        WHEN 2 THEN 'Basketball game night #' || X
+        WHEN 3 THEN 'Volleyball community match #' || X
+        WHEN 4 THEN 'Tennis meetup #' || X
+        WHEN 5 THEN 'Running club event #' || X
+        ELSE 'General sports event #' || X
+    END,
+    CASE MOD(X - 1, 6) + 1
+        WHEN 1 THEN 'Istanbul, Besiktas Field'
+        WHEN 2 THEN 'Istanbul, Kadikoy Court'
+        WHEN 3 THEN 'Istanbul, Uskudar Arena'
+        WHEN 4 THEN 'Istanbul, Maltepe Tennis Club'
+        WHEN 5 THEN 'Istanbul, Caddebostan Sahil'
+        ELSE 'Istanbul, City Sports Center'
+    END,
+    '18:00',
+    CASE MOD(X - 1, 6) + 1
+        WHEN 1 THEN 'Football Event #' || X
+        WHEN 2 THEN 'Basketball Event #' || X
+        WHEN 3 THEN 'Volleyball Event #' || X
+        WHEN 4 THEN 'Tennis Event #' || X
+        WHEN 5 THEN 'Running Event #' || X
+        ELSE 'Other Sports Event #' || X
+    END,
+    'https://picsum.photos/seed/event-' || X || '/1200/700'
+FROM SYSTEM_RANGE(1, 100);
+
+-- Seed registrations so organizers can test contact visibility.
+-- Every event gets two non-owner registrants.
+INSERT INTO "EVENT_REGISTRATIONS" ("ID", "CREATED_DATE", "STATUS", "APP_USER_ID", "EVENT_ID")
+SELECT
+    1000 + E.ID,
+    DATEADD('MINUTE', E.ID, TIMESTAMP '2026-04-26T09:00:00'),
+    TRUE,
+    CASE E.APP_USER_ID
+        WHEN 1 THEN 2
+        WHEN 2 THEN 3
+        WHEN 3 THEN 4
+        ELSE 1
+    END,
+    E.ID
+FROM "EVENTS" E;
+
+INSERT INTO "EVENT_REGISTRATIONS" ("ID", "CREATED_DATE", "STATUS", "APP_USER_ID", "EVENT_ID")
+SELECT
+    2000 + E.ID,
+    DATEADD('MINUTE', E.ID, TIMESTAMP '2026-04-26T10:00:00'),
+    TRUE,
+    CASE E.APP_USER_ID
+        WHEN 1 THEN 3
+        WHEN 2 THEN 4
+        WHEN 3 THEN 1
+        ELSE 2
+    END,
+    E.ID
+FROM "EVENTS" E;
+
+ALTER TABLE "CATEGORIES" ALTER COLUMN "ID" RESTART WITH 1000;
+ALTER TABLE "APP_USERS" ALTER COLUMN "ID" RESTART WITH 1000;
+ALTER TABLE "EVENTS" ALTER COLUMN "ID" RESTART WITH 1000;
+ALTER TABLE "EVENT_REGISTRATIONS" ALTER COLUMN "ID" RESTART WITH 5000;

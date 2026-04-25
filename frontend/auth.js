@@ -13,14 +13,17 @@ function persistSession(data) {
             id: data.userId,
             username: data.username,
             email: data.email,
+            phone: data.phone || "",
+            profileImageUrl: data.profileImageUrl || "",
         })
     );
 }
 
-function escapeHtml(str) {
-    const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+function extractErrorMessage(payload, fallback) {
+    if (payload && typeof payload.message === "string" && payload.message.trim()) {
+        return payload.message.trim();
+    }
+    return fallback;
 }
 
 // Display form feedback and trigger Toast notification
@@ -41,18 +44,27 @@ if (registerForm) {
 
         const username = document.getElementById("registerUsername").value;
         const email = document.getElementById("registerEmail").value;
+        const phone = document.getElementById("registerPhone").value;
         const password = document.getElementById("registerPassword").value;
-        const registerMessage = document.getElementById("registerMessage");
+        const submitButton = registerForm.querySelector("button[type='submit']");
+        if (submitButton) submitButton.disabled = true;
 
         try {
             const response = await fetch(`${API_BASE}/api/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, phone, password }),
             });
 
             if (!response.ok) {
-                showToast("Registration failed. Please check your details.", "error");
+                let message = "Registration failed. Please check your details.";
+                try {
+                    const errorBody = await response.json();
+                    message = extractErrorMessage(errorBody, message);
+                } catch {
+                    // ignore parse errors and use fallback
+                }
+                showToast(message, "error");
                 return;
             }
 
@@ -64,6 +76,8 @@ if (registerForm) {
             setTimeout(() => { window.location.href = "index.html"; }, 1500);
         } catch (err) {
             showToast("Server connection error!", "error");
+        } finally {
+            if (submitButton) submitButton.disabled = false;
         }
     });
 }
@@ -75,7 +89,8 @@ if (loginForm) {
 
         const email = document.getElementById("loginEmail").value;
         const password = document.getElementById("loginPassword").value;
-        const loginMessage = document.getElementById("loginMessage");
+        const submitButton = loginForm.querySelector("button[type='submit']");
+        if (submitButton) submitButton.disabled = true;
 
         try {
             const response = await fetch(`${API_BASE}/api/auth/login`, {
@@ -85,7 +100,14 @@ if (loginForm) {
             });
 
             if (!response.ok) {
-                showToast("Invalid email or password.", "error");
+                let message = "Invalid email or password.";
+                try {
+                    const errorBody = await response.json();
+                    message = extractErrorMessage(errorBody, message);
+                } catch {
+                    // ignore parse errors and use fallback
+                }
+                showToast(message, "error");
                 return;
             }
 
@@ -96,6 +118,14 @@ if (loginForm) {
             setTimeout(() => { window.location.href = "index.html"; }, 1000);
         } catch (err) {
             showToast("Cannot connect to server.", "error");
+        } finally {
+            if (submitButton) submitButton.disabled = false;
         }
     });
+}
+
+// Improve UX: if already authenticated, avoid showing auth pages again.
+if ((registerForm || loginForm) && localStorage.getItem("accessToken")) {
+    showToast("You are already logged in.", "info");
+    setTimeout(() => { window.location.href = "index.html"; }, 800);
 }
