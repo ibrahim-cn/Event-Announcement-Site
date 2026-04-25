@@ -1,4 +1,9 @@
 # Event Announcement Site
+## Team Number
+22
+## Repository URL
+https://github.com/ibrahim-cn/Event-Announcement-Site
+## Youtube URL
 
 ## Team members
 
