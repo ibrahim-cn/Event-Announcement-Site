@@ -3,7 +3,7 @@ const accessToken = localStorage.getItem("accessToken");
 const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
 
 // Protection
-if (!accessToken || !currentUser || currentUser.email !== "admin@bitikla.com") {
+if (!accessToken || !currentUser || currentUser.email !== "admin@event.web") {
     alert("Unauthorized access. Admin privileges required.");
     window.location.href = "index.html";
 }

@@ -124,7 +124,7 @@ if (loginForm) {
             showToast("Login successful!", "success");
 
             setTimeout(() => { 
-                if (data.email === "admin@bitikla.com") {
+                if (data.email === "admin@event.web") {
                     window.location.href = "admin.html";
                 } else {
                     window.location.href = "index.html"; 

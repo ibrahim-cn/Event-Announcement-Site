@@ -49,7 +49,7 @@ function updateNavbar() {
     if (registerLink) registerLink.style.display = isLoggedIn ? "none" : "inline-block";
     if (logoutLink) logoutLink.style.display = "none";
     if (adminLink) {
-        const isAdmin = currentUser && currentUser.email === "admin@bitikla.com";
+        const isAdmin = currentUser && currentUser.email === "admin@event.web";
         adminLink.style.display = isAdmin ? "inline-block" : "none";
     }
     if (!userInfo) return;
