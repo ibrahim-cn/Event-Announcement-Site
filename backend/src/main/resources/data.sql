@@ -55,7 +55,14 @@ SELECT
         WHEN 5 THEN 'Running Event #' || X
         ELSE 'Other Sports Event #' || X
     END,
-    'https://picsum.photos/seed/event-' || X || '/1200/700'
+    CASE MOD(X - 1, 6) + 1
+        WHEN 1 THEN 'https://loremflickr.com/600/400/football,sport?lock=' || X
+        WHEN 2 THEN 'https://loremflickr.com/600/400/basketball,sport?lock=' || X
+        WHEN 3 THEN 'https://loremflickr.com/600/400/volleyball,sport?lock=' || X
+        WHEN 4 THEN 'https://loremflickr.com/600/400/tennis,sport?lock=' || X
+        WHEN 5 THEN 'https://loremflickr.com/600/400/running,sport?lock=' || X
+        ELSE 'https://loremflickr.com/600/400/stadium,sport?lock=' || X
+    END
 FROM SYSTEM_RANGE(1, 100);
 
 -- Seed registrations so organizers can test contact visibility.

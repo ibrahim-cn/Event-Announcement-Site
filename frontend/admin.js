@@ -64,7 +64,8 @@ loadCategoriesMap();
 document.getElementById("createEventForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const title = document.getElementById("eventTitle").value;
-    const date = document.getElementById("eventDate").value;
+    const rawDate = document.getElementById("eventDate").value;
+    const date = rawDate ? rawDate + "T00:00:00" : null;
     const location = document.getElementById("eventLocation").value;
     const categoryId = document.getElementById("eventCategory").value;
     const description = document.getElementById("eventDescription").value;
@@ -207,7 +208,8 @@ document.getElementById("editEventForm").onsubmit = async (e) => {
     if (!currentEditEvent) return;
     
     currentEditEvent.title = document.getElementById("editEventTitle").value;
-    currentEditEvent.date = document.getElementById("editEventDate").value;
+    const rawEditDate = document.getElementById("editEventDate").value;
+    currentEditEvent.date = rawEditDate ? rawEditDate + "T00:00:00" : null;
     currentEditEvent.location = document.getElementById("editEventLocation").value;
     currentEditEvent.categoryId = Number(document.getElementById("editEventCategory").value);
     currentEditEvent.description = document.getElementById("editEventDescription").value;

@@ -63,8 +63,26 @@ function categoryLabel(event) {
 
 function resolveEventImage(event) {
     const raw = typeof event.imageUrl === "string" ? event.imageUrl.trim() : "";
-    if (!raw) return "https://picsum.photos/seed/sport-default/600/340";
-    return raw;
+    if (raw) return raw;
+
+    const categoryName = (event.categoryName || categoryNames[event.categoryId] || "").toLowerCase();
+    
+    if (categoryName.includes("football") || categoryName.includes("soccer")) {
+        return "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=600&auto=format&fit=crop";
+    } else if (categoryName.includes("basketball")) {
+        return "https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=600&auto=format&fit=crop";
+    } else if (categoryName.includes("tennis")) {
+        return "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=600&auto=format&fit=crop";
+    } else if (categoryName.includes("volleyball")) {
+        return "https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?q=80&w=600&auto=format&fit=crop";
+    } else if (categoryName.includes("run") || categoryName.includes("marathon")) {
+        return "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=600&auto=format&fit=crop";
+    } else if (categoryName.includes("swim")) {
+        return "https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=600&auto=format&fit=crop";
+    }
+    
+    // Generic high-quality sports fallback
+    return "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop";
 }
 
 async function readErrorMessage(response, fallbackMessage) {
@@ -116,7 +134,7 @@ function displayEvents(filteredEvents = events) {
                 : `<button type="button" class="create-btn register-btn" data-action="register" data-id="${event.id}" data-title="${escapeHtml(event.title || 'Event')}">Register</button>`;
 
         eventCard.innerHTML = `
-      <img class="event-card__image" src="${escapeHtml(resolveEventImage(event))}" alt="${escapeHtml(event.title || "Event image")}" loading="lazy" onerror="this.src='https://picsum.photos/seed/sport-fallback/600/340'; this.onerror=null;">
+      <img class="event-card__image" src="${escapeHtml(resolveEventImage(event))}" alt="${escapeHtml(event.title || "Event image")}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop'; this.onerror=null;">
       <h3>${escapeHtml(event.title || "")}</h3>
       <p>Date: ${escapeHtml(formatEventDate(event))}</p>
       <p>Location: ${escapeHtml(event.location || "")}</p>
