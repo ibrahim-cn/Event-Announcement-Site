@@ -112,8 +112,8 @@ function displayEvents(filteredEvents = events) {
         const registerButton = isOwner
             ? `<button type="button" class="create-btn register-btn" disabled title="You cannot register to your own event.">Your Event</button>`
             : isRegistered
-                ? `<button type="button" class="create-btn register-btn" data-action="unregister" data-id="${event.id}">Cancel Registration</button>`
-                : `<button type="button" class="create-btn register-btn" data-action="register" data-id="${event.id}">Register for event</button>`;
+                ? `<button type="button" class="create-btn register-btn" style="background-color: #333;" data-action="unregister" data-id="${event.id}" data-title="${escapeHtml(event.title || 'Event')}">Cancel Registration</button>`
+                : `<button type="button" class="create-btn register-btn" data-action="register" data-id="${event.id}" data-title="${escapeHtml(event.title || 'Event')}">Register</button>`;
 
         eventCard.innerHTML = `
       <img class="event-card__image" src="${escapeHtml(resolveEventImage(event))}" alt="${escapeHtml(event.title || "Event image")}" loading="lazy" onerror="this.src='https://picsum.photos/seed/sport-fallback/600/340'; this.onerror=null;">
@@ -122,7 +122,6 @@ function displayEvents(filteredEvents = events) {
       <p>Location: ${escapeHtml(event.location || "")}</p>
       <p>Category: ${escapeHtml(categoryLabel(event))}</p>
       <p>Description: ${escapeHtml(event.description || "")}</p>
-      <p class="reg-hint">${accessToken ? "" : "To register, please <a href='login.html'>sign in</a> or <a href='register.html'>create an account</a>."}</p>
       ${registerButton}
       ${deleteButton}
     `;
@@ -146,58 +145,19 @@ eventList.addEventListener("click", async (e) => {
     // REGISTER ACTION
     if (btn.dataset.action === "register") {
         if (!accessToken) {
-            showToast("Please sign in or register before signing up for an event.", "info");
-            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+            localStorage.setItem("pendingRegEventId", id);
+            localStorage.setItem("pendingRegEventTitle", btn.dataset.title || "Event");
+            window.location.href = "login.html";
             return;
         }
-        try {
-            const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
-                method: "POST",
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            if (res.status === 401) {
-                showToast("Your session is invalid. Please sign in again.", "error");
-                setTimeout(() => { window.location.href = "login.html"; }, 1500);
-                return;
-            }
-            if (!res.ok) {
-                const message = await readErrorMessage(res, "Registration failed.");
-                showToast(message, "error");
-                return;
-            }
-            registeredEventIds.add(id);
-            filterEvents();
-            showToast("You are now registered for this event!", "success");
-        } catch {
-            showToast("Cannot reach the server. Is the backend running?", "error");
-        }
+        await triggerRegistration(id);
         return;
     }
 
     // UNREGISTER ACTION
     if (btn.dataset.action === "unregister") {
         if (!accessToken) return;
-        try {
-            const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            if (res.status === 401) {
-                showToast("Please sign in again.", "error");
-                setTimeout(() => { window.location.href = "login.html"; }, 1200);
-                return;
-            }
-            if (!res.ok) {
-                const message = await readErrorMessage(res, "Could not cancel registration.");
-                showToast(message, "error");
-                return;
-            }
-            registeredEventIds.delete(id);
-            filterEvents();
-            showToast("Registration cancelled.", "success");
-        } catch {
-            showToast("Cannot reach the server.", "error");
-        }
+        showCancelConfirmation(id, btn.dataset.title || "Event");
         return;
     }
 
@@ -262,10 +222,118 @@ async function loadEvents() {
         }
         events = await r.json();
         displayEvents(events);
+        
+        // Check for pending registration intent after logging in
+        const pendingId = localStorage.getItem("pendingRegEventId");
+        const pendingTitle = localStorage.getItem("pendingRegEventTitle");
+        if (pendingId && accessToken) {
+            localStorage.removeItem("pendingRegEventId");
+            localStorage.removeItem("pendingRegEventTitle");
+            showRegistrationPrompt(Number(pendingId), pendingTitle);
+        }
+
     } catch {
         eventList.innerHTML = `<p>Cannot reach API at ${API_BASE}. Start the backend.</p>`;
         showToast("API connection failed!", "error");
     }
+}
+
+async function triggerRegistration(id) {
+    try {
+        const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        if (res.status === 401) {
+            showToast("Your session is invalid. Please sign in again.", "error");
+            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+            return;
+        }
+        if (!res.ok) {
+            const message = await readErrorMessage(res, "Registration failed.");
+            showToast(message, "error");
+            return;
+        }
+        registeredEventIds.add(id);
+        filterEvents();
+        showToast("You are now registered for this event!", "success");
+    } catch {
+        showToast("Cannot reach the server. Is the backend running?", "error");
+    }
+}
+
+function showRegistrationPrompt(id, title) {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.innerHTML = `
+       <div class="modal-content">
+           <h3>Event Registration</h3>
+           <p>You recently showed interest in registering for <strong>${escapeHtml(title)}</strong>.</p>
+           <p>Would you like to complete your registration now?</p>
+           <div class="modal-actions">
+               <button id="confirmRegBtn" class="create-btn">Yes, Register</button>
+               <button id="cancelRegBtn" class="delete-btn">Cancel</button>
+           </div>
+       </div>
+    `;
+    document.body.appendChild(overlay);
+
+    document.getElementById("confirmRegBtn").onclick = async () => {
+        document.body.removeChild(overlay);
+        await triggerRegistration(id);
+    };
+    document.getElementById("cancelRegBtn").onclick = () => {
+        document.body.removeChild(overlay);
+    };
+}
+
+async function triggerCancelRegistration(id) {
+    try {
+        const res = await fetch(`${API_BASE}/api/events/${id}/registrations`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        if (res.status === 401) {
+            showToast("Please sign in again.", "error");
+            setTimeout(() => { window.location.href = "login.html"; }, 1200);
+            return;
+        }
+        if (!res.ok) {
+            const message = await readErrorMessage(res, "Could not cancel registration.");
+            showToast(message, "error");
+            return;
+        }
+        registeredEventIds.delete(id);
+        filterEvents();
+        showToast("Registration cancelled successfully.", "success");
+    } catch {
+        showToast("Cannot reach the server.", "error");
+    }
+}
+
+function showCancelConfirmation(id, title) {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    overlay.innerHTML = `
+       <div class="modal-content">
+           <h3>Cancel Registration</h3>
+           <p>Are you sure you want to cancel your registration for <strong>${escapeHtml(title)}</strong>?</p>
+           <p>This action cannot be undone.</p>
+           <div class="modal-actions">
+               <button id="confirmCancelBtn" class="delete-btn" style="background-color: #a83232; color: white;">Yes, Cancel</button>
+               <button id="abortCancelBtn" class="create-btn">No, Keep It</button>
+           </div>
+       </div>
+    `;
+    document.body.appendChild(overlay);
+
+    document.getElementById("confirmCancelBtn").onclick = async () => {
+        document.body.removeChild(overlay);
+        await triggerCancelRegistration(id);
+    };
+    document.getElementById("abortCancelBtn").onclick = () => {
+        document.body.removeChild(overlay);
+    };
 }
 
 async function loadMyRegistrations() {

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SportEvents</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <h1 class="logo"><a href="index.html">SportEvents</a></h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li id="adminLink" style="display: none;"><a href="admin.html" style="color: #4c6ef5;">Admin Panel</a></li>
+                <li id="loginLink"><a href="login.html">Login</a></li>
+                <li id="registerLink"><a href="register.html">Register</a></li>
+                <li id="userInfo"></li>
+                <li id="logoutLink"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-dashboard">
+        <aside class="admin-sidebar">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li><a href="#" id="tabCreateEvent" class="active">Create New Event</a></li>
+                <li><a href="#" id="tabManageEvents">Manage Events</a></li>
+            </ul>
+        </aside>
+
+        <section class="admin-content">
+            <!-- CREATE EVENT TAB -->
+            <div id="viewCreateEvent">
+                <div class="form-card" style="max-width: 100%;">
+                    <h2>Create a Sports Event</h2>
+                    <form id="createEventForm">
+                        <input type="text" id="eventTitle" placeholder="Event Title" required>
+                        <input type="date" id="eventDate" required>
+                        <input type="text" id="eventLocation" placeholder="Location" required>
+                        
+                        <div style="margin-bottom:15px;">
+                            <input type="file" id="eventImage" accept="image/*" style="padding:0;">
+                        </div>
+
+                        <select id="eventCategory" required>
+                            <!-- populated by js -->
+                        </select>
+
+                        <textarea id="eventDescription" placeholder="Event Description" rows="4"></textarea>
+                        
+                        <div class="button-group">
+                            <button type="submit" class="create-btn">Create Event</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MANAGE EVENTS TAB -->
+            <div id="viewManageEvents" style="display: none;">
+                <h2>Manage Events</h2>
+                <div id="adminEventList" class="data-table-container">
+                    <!-- Events will be populated here -->
+                </div>
+            </div>
+
+            <!-- EVENT PARTICIPANTS SUB-VIEW -->
+            <div id="viewParticipants" style="display: none;">
+                <button class="back-btn" id="btnBackToEvents">&larr; Back to Events</button>
+                <h2 style="margin-top: 15px;">Event Participants</h2>
+                <h3 id="participantEventTitle" style="margin-bottom: 15px; color: #777; font-weight: normal;"></h3>
+                <div id="participantList" class="data-table-container">
+                    <!-- Participants will be populated here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Editing User -->
+    <div id="editUserModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Edit Participant</h3>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <input type="text" id="editUsername" placeholder="Username" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <input type="email" id="editEmail" placeholder="Email" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <input type="tel" id="editPhone" placeholder="Phone" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <div class="modal-actions">
+                    <button type="submit" class="create-btn">Save Changes</button>
+                    <button type="button" class="delete-btn" id="cancelEditUserBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Event -->
+    <div id="editEventModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3>Edit Event</h3>
+            <form id="editEventForm">
+                <input type="hidden" id="editEventId">
+                <input type="text" id="editEventTitle" placeholder="Event Title" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <input type="date" id="editEventDate" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <input type="text" id="editEventLocation" placeholder="Location" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+                <select id="editEventCategory" required style="width: 100%; padding: 10px; margin-bottom: 10px;"></select>
+                <textarea id="editEventDescription" placeholder="Description" rows="4" style="width: 100%; padding: 10px; margin-bottom: 10px;"></textarea>
+                <div class="modal-actions">
+                    <button type="submit" class="create-btn">Save Event</button>
+                    <button type="button" class="delete-btn" id="cancelEditEventBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="toast.js"></script>
+    <script src="navbar.js"></script>
+    <script src="logout.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+</html>

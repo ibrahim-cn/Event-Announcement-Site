@@ -19,7 +19,7 @@ Successful login information is stored in localStorage as currentUser.
             <h1 class="logo"><a href="index.html">SportEvents</a></h1>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="create-event.html">Create Event</a></li>
+                <li id="adminLink" style="display: none;"><a href="admin.html" style="color: #4c6ef5;">Admin Panel</a></li>
 
                 <li id="loginLink"><a href="login.html">Login</a></li>
                 <li id="registerLink"><a href="register.html">Register</a></li>
@@ -41,8 +41,10 @@ Successful login information is stored in localStorage as currentUser.
                 <button type="submit" class="create-btn">Login</button>
             </form>
 
-            <div id="loginMessage" class="preview-box">
-                <p>No login yet.</p>
+            <div id="registerPrompt" style="display: none; margin-top: 20px; text-align: center; padding: 15px; border-radius: 8px; background-color: #ffebee; border: 1px solid #e57373; color: #b71c1c;">
+                <p style="margin-bottom: 10px; font-weight: bold; font-size: 16px;">Account not found!</p>
+                <p style="margin-bottom: 15px; font-size: 14px;">It looks like you don't have an account yet. Please create one to register for events.</p>
+                <a href="register.html" class="auth-action auth-action--register">Create an Account</a>
             </div>
         </div>
     </main>
