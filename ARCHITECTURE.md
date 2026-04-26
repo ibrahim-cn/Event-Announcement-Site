@@ -1,4 +1,4 @@
-# Event-Announcement-Site
+# Event-Announcement-Site GROUP 22
 ## Change History
 
 | Process | Date | Contributors | Description |
@@ -92,23 +92,37 @@ The system follows a **Layered Architecture Style** combined with a **Client-Ser
 ### ARCHITECTURE EVOLUTION & FEATURE UPDATES
 The Event Announcement System has evolved from a basic functional prototype into a sophisticated, high-integrity Full-Stack Enterprise-Grade platform. This evolution focuses on four main pillars: Security Hardening, Automated Data Integrity, Administrative Governance, and Modern User Experience (UX).
 # 1. Structural Foundation & Data Integrity
-•	Logical Inheritance (BaseEntity): A major structural shift was the introduction of the BaseEntity abstract class. This unified all domain models (AppUser, Event, Category), ensuring standardized auditing with id, createdDate, and status fields across the entire database schema.
-•	Automated Data Synchronization: The implementation of the DataSqlExportService introduced a "Physical Snapshot" mechanism. It utilizes TransactionSynchronizationManager to automatically update the physical data.sql file after every successful database commit, ensuring continuous development environment parity for the entire team.
-•	Complex Business Logic: The service layer was expanded with AccountService and EventRegistrationService to manage intricate operations like "Cascading Deletes". When a user deletes their account, the system now automatically purges all associated registrations and hosted events to maintain perfect referential integrity.
+•	**Logical Inheritance (BaseEntity):** A major structural shift was the introduction of the BaseEntity abstract class. This unified all domain models (AppUser, Event, Category), ensuring standardized auditing with id, createdDate, and status fields across the entire database schema.
+
+•	**Automated Data Synchronization:** The implementation of the DataSqlExportService introduced a "Physical Snapshot" mechanism. It utilizes TransactionSynchronizationManager to automatically update the physical data.sql file after every successful database commit, ensuring continuous development environment parity for the entire team.
+
+•	**Complex Business Logic:** The service layer was expanded with AccountService and EventRegistrationService to manage intricate operations like "Cascading Deletes". When a user deletes their account, the system now automatically purges all associated registrations and hosted events to maintain perfect referential integrity.
+
 # 2. Security & Stateless Authentication
-•	Stateless Security Model: The backend was hardened using Spring Security and JWT (JSON Web Token). The SecurityConfig defines a strict stateless session policy, requiring a valid Bearer token for all sensitive operations while keeping public viewing routes accessible.
-•	Data Encapsulation: Security was further enhanced at the model level by enforcing WRITE_ONLY constraints on passwords. This ensures that sensitive credentials are never leaked in JSON responses.
+•	**Stateless Security Model:** The backend was hardened using Spring Security and JWT (JSON Web Token). The SecurityConfig defines a strict stateless session policy, requiring a valid Bearer token for all sensitive operations while keeping public viewing routes accessible.
+
+•	**Data Encapsulation:** Security was further enhanced at the model level by enforcing WRITE_ONLY constraints on passwords. This ensures that sensitive credentials are never leaked in JSON responses.
+
 # 3. Administrative Ecosystem (Admin Panel)
-•	Admin Governance: A dedicated Admin Dashboard (admin.html & admin.js) was introduced to provide high-level management capabilities.
-•	Role-Based Access Control: The system now identifies administrative users and dynamically provides access to global event management, user editing, and participant roster controls.
-•	Granular Management: Admins and event organizers can now view detailed participant contact information and cancel specific registrations, a feature supported by the specialized EventRegistrantContactDto and corresponding service methods.
+•	**Admin Governance:** A dedicated Admin Dashboard (admin.html & admin.js) was introduced to provide high-level management capabilities.
+
+•	**Role-Based Access Control:** The system now identifies administrative users and dynamically provides access to global event management, user editing, and participant roster controls.
+
+•	**Granular Management:** Admins and event organizers can now view detailed participant contact information and cancel specific registrations, a feature supported by the specialized EventRegistrantContactDto and corresponding service methods.
+
 # 4. Frontend Engineering & Modern UX (Custom Implementation)
 The presentation layer underwent a total transformation to provide a responsive and interactive user experience:
-•	Simplified Event Interaction: To reduce user confusion, the redundant mix of Login/Register/Logout buttons on event pages was removed. Guest users are now presented only with a "Register" option, which utilizes the Pending Registration Intent pattern to cache the user's intent, handle the login flow, and automatically prompt them to complete the registration upon their return.
-•	Smart Login Feedback & UX: The authentication flow now features an Intelligent Account Guard. If a login attempt fails because an account does not exist, the UI dynamically displays a "Register Prompt" with a shake animation to visually guide the user toward account creation instead of just showing a generic error.
-•	Dynamic Identity Navigation (navbar.js): The navigation bar implements Conditional Rendering to adapt to the user's login state. It renders personalized dropdowns, dynamic avatars (or initial-based placeholders), and context-aware links based on the active JWT session.
-•	Real-Time Feedback System (toast.js & toast.css): A custom, non-blocking Toast Notification System replaced intrusive browser alerts. It provides color-coded, animated feedback (Success, Error, Info) with smooth cubic-bezier transitions.
-•	Adaptive Content & Theming:
+
+•	**Simplified Event Interaction:** To reduce user confusion, the redundant mix of Login/Register/Logout buttons on event pages was removed. Guest users are now presented only with a "Register" option, which utilizes the Pending Registration Intent pattern to cache the user's intent, handle the login flow, and automatically prompt them to complete the registration upon their return.
+
+•	**Smart Login Feedback & UX:** The authentication flow now features an Intelligent Account Guard. If a login attempt fails because an account does not exist, the UI dynamically displays a "Register Prompt" with a shake animation to visually guide the user toward account creation instead of just showing a generic error.
+
+•	**Dynamic Identity Navigation (navbar.js):** The navigation bar implements Conditional Rendering to adapt to the user's login state. It renders personalized dropdowns, dynamic avatars (or initial-based placeholders), and context-aware links based on the active JWT session.
+
+•	**Real-Time Feedback System (toast.js & toast.css):** A custom, non-blocking Toast Notification System replaced intrusive browser alerts. It provides color-coded, animated feedback (Success, Error, Info) with smooth cubic-bezier transitions.
+
+•	**Adaptive Content & Theming:**
+
 Theme Engine: Persistent Dark/Light Mode support was integrated using localStorage and CSS variables.
 Intelligent Asset Handling: The system utilizes a Category-Based Image Resolver, automatically selecting high-quality sport-specific fallbacks (e.g., Football, Basketball, Tennis) if a custom image URL is not provided.
 
