@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <h1 class="logo"><a href="index.html">SportEvents</a></h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li id="adminLink" style="display: none;"><a href="admin.html" style="color: #4c6ef5;">Admin Panel</a></li>
+                <li id="loginLink"><a href="login.html">Login</a></li>
+                <li id="registerLink"><a href="register.html">Register</a></li>
+                <li id="userInfo"></li>
+                <li id="logoutLink"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="form-page">
+        <div class="form-card">
+            <h2>Profile</h2>
+            <div id="profileBox" class="preview-box"><p>Loading profile...</p></div>
+            <div class="preview-box">
+                <h3>Profile Photo</h3>
+                <input id="profileImageFile" type="file" accept="image/*">
+                <div class="button-group" style="margin-top: 10px;">
+                    <button id="uploadProfileImageBtn" type="button">Upload Photo</button>
+                </div>
+            </div>
+            <div class="button-group" style="margin-top: 12px;">
+                <button id="deleteAccountBtn" type="button" class="cancel-btn">Delete Account</button>
+            </div>
+        </div>
+    </main>
+    <div id="toastContainer"></div>
+    <script src="toast.js"></script>
+    <script src="profile.js"></script>
+    <script src="logout.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>

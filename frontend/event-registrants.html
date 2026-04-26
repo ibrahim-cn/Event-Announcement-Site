@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registrants</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <h1 class="logo"><a href="index.html">SportEvents</a></h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create-event.html">Create Event</a></li>
+                <li id="loginLink"><a href="login.html">Login</a></li>
+                <li id="registerLink"><a href="register.html">Register</a></li>
+                <li id="userInfo"></li>
+                <li id="logoutLink"><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="form-page">
+        <div class="form-card">
+            <h2>Event Registrants</h2>
+            <div id="registrantsBox" class="preview-box"><p>Loading...</p></div>
+        </div>
+    </main>
+    <div id="toastContainer"></div>
+    <script src="toast.js"></script>
+    <script src="event-registrants.js"></script>
+    <script src="logout.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>

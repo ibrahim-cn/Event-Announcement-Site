@@ -18,6 +18,11 @@ public class AppUser extends BaseEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password = "";
 
+    private String phone = "";
+
+    @Column(name = "profile_image_url")
+    private String profileImageUrl = "";
+
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Event> events = new ArrayList<>();
@@ -46,6 +51,22 @@ public class AppUser extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public List<Event> getEvents() {
